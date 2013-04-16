@@ -171,14 +171,10 @@ Public Class clsOutlook
         If Not OrdnerEID = Nothing And Not OrdnerSID = Nothing Then
             _MSFold = _MSNameSpace.GetFolderFromID(OrdnerEID, OrdnerSID)
             If Copy = 0 Then
-                _MSMailItem.UserProperties.Add("KdMailsNet", Outlook.OlUserPropertyType.olText)
-                _MSMailItem.UserProperties.Find("KdMailsNet").Value = "OK"
                 _MSMailItem.Copy()
             End If
             _MSMailItem.Move(_MSFold)
         Else
-            _MSMailItem.UserProperties.Add("KdMailsNet", Outlook.OlUserPropertyType.olText)
-            _MSMailItem.UserProperties.Find("KdMailsNet").Value = "OK"
             _MSMailItem.Save()
         End If
     End Function
