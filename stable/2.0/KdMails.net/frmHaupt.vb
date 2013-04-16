@@ -2,13 +2,14 @@
 Imports KdMails.net.clsDatenbank
 Imports KdMails.net.clsConfig
 
-'TODO: Tray Icon and Tray Start
-
 Public Class frmHaupt
 #Region "Deklarationen"
     Public Shared cOutlook As New clsOutlook
     Public Shared cDatenbank As New clsDatenbank
     Public Shared cConfig As New clsConfig
+
+    Public strDate As String = Format(Now, "dd.MM.yyyy")
+    Public strTime As String = Format(Now, "HH:mm")
 #End Region
 
 #Region "Subs"
@@ -41,10 +42,10 @@ Public Class frmHaupt
 
         stStatus.Text = "Verbindung zur Datenbank wird hergestellt"
         Me.Refresh()
-        cDatenbank.SetConnectionInfo(cConfig.GetSettings("DB.Server"), _
-                                     cConfig.GetSettings("DB.Datenbank"), _
-                                     cConfig.GetSettings("DB.Benutzer"), _
-                                     cConfig.GetSettings("DB.Kennwort"))
+        cDatenbank.SetConnectionInfo(cConfig.GetSettings(ESettings.DB_Server), _
+                                     cConfig.GetSettings(ESettings.DB_Datenbank), _
+                                     cConfig.GetSettings(ESettings.DB_Benutzer), _
+                                     cConfig.GetSettings(ESettings.DB_Kennwort))
 
         stStatus.Text = cDatenbank.ConnectDB()
         btnLos.Enabled = True

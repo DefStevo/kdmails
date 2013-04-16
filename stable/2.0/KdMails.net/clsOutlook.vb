@@ -1,7 +1,5 @@
 ﻿Imports Microsoft.Office.Interop
 
-'TODO: Posteingang/Postausgang bei Ankunft prüfen
-
 Public Class clsOutlook
 #Region "Deklarationen"
     Private _MSOutlook As Outlook._Application
@@ -9,6 +7,7 @@ Public Class clsOutlook
     Private _MSFolders As Outlook.Folders
     Private _MSFold As Outlook.MAPIFolder
     Private _MSItem As Outlook.Items
+    Private _MSMailItems As Outlook.Items
     Private _MSMailItem As Outlook.MailItem
     Private _MSAdressList As Outlook.AddressList
     Private _MSAdress As Outlook.AddressEntries
@@ -107,19 +106,20 @@ Public Class clsOutlook
 
             _MSFold = _MSNameSpace.GetFolderFromID(OrdnerEID, OrdnerSID)
 
-            If _MSFold.Items.Count = 0 Then
+            Dim strDateLast As String = ""
+            strDateLast = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.LetzerLauf_Datum) & " " & _
+                          frmHaupt.cConfig.GetSettings(clsConfig.ESettings.LetzerLauf_Zeit)
+
+            _MSMailItems = _MSFold.Items.Restrict("[ReceivedTime] > '" & strDateLast & "'")
+
+            If _MSMailItems.Count = 0 Then
                 Return Nothing
             Else
-
                 _iMailID = 1
+                _MSMailItems.Sort("ReceivedTime", False)
             End If
 
-
-            _MSMailItem = _MSFold.Items(_iMailID)
-
-        If Not _MSMailItem.UserProperties.Find("KDMailsNet") Is Nothing Then
-            _MSMailItem = GetNextMail()
-        End If
+            _MSMailItem = _MSMailItems.Item(_iMailID)
 
             Return _MSMailItem
 
@@ -144,17 +144,10 @@ Public Class clsOutlook
 
             _iMailID += 1
 
-            If _MSFold.Items.Count >= _iMailID Then
-
-                _MSMailItem = _MSFold.Items(_iMailID)
-
+            If _MSMailItems.Count >= _iMailID Then
+                _MSMailItem = _MSMailItems(_iMailID)
             Else
                 _MSMailItem = Nothing
-                Return _MSMailItem
-            End If
-
-            If Not _MSMailItem.UserProperties.Find("KDMailsNet") Is Nothing Then
-                _MSMailItem = GetNextMail()
             End If
 
             Return _MSMailItem
