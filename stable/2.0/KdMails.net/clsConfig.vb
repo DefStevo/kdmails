@@ -104,6 +104,16 @@
 
 #Region "Funktionen"
     Function InitConfig(ByVal Ordner As Boolean, ByVal Domänen As Boolean, ByVal IgnoreList As Boolean, ByVal Settings As Boolean) As Boolean
+
+        If IgnoreList = True Then
+            oIgnoreL = New List(Of sIgnore)
+            If ReadConfigIgnore() = False Then
+                MsgBox("Datei kann nicht gelesen werden" & vbCrLf & _
+                       _strDateiIgnore, MsgBoxStyle.Critical, "Fehler beim Lesen der Konfiguration")
+            End If
+
+        End If
+
         If Ordner = True Then
             oOrdnerL = New List(Of sOrdner)
             If ReadConfigFolder() = False Then
@@ -118,15 +128,6 @@
             If ReadConfigDomain() = False Then
                 MsgBox("Datei kann nicht gelesen werden" & vbCrLf & _
                        _strDateiDomäne, MsgBoxStyle.Critical, "Fehler beim Lesen der Konfiguration")
-            End If
-
-        End If
-
-        If IgnoreList = True Then
-            oIgnoreL = New List(Of sIgnore)
-            If ReadConfigIgnore() = False Then
-                MsgBox("Datei kann nicht gelesen werden" & vbCrLf & _
-                       _strDateiIgnore, MsgBoxStyle.Critical, "Fehler beim Lesen der Konfiguration")
             End If
 
         End If
@@ -202,7 +203,10 @@
             strBuffer = _srDomäne.ReadLine
 
             While Not strBuffer Is Nothing
-                AddDomain(strBuffer.Split(";")(0).ToString, strBuffer.Split(";")(1).ToString, strBuffer.Split(";")(2).ToString, strBuffer.Split(";")(3).ToString, strBuffer.Split(";")(4).ToString)
+                'Einträge die in der IgnoreList zu finden sind nicht einlesen
+                If SearchIgnoreList(strBuffer.Split(";")(0).ToString) = -1 Then
+                    AddDomain(strBuffer.Split(";")(0).ToString, strBuffer.Split(";")(1).ToString, strBuffer.Split(";")(2).ToString, strBuffer.Split(";")(3).ToString, strBuffer.Split(";")(4).ToString)
+                End If
                 strBuffer = _srDomäne.ReadLine
             End While
 
@@ -324,13 +328,14 @@
 
         For i As Integer = 0 To oDomänenL.Count - 1
             If Not oDomänenL(i).strOrdner.strName = _strNone Then
-                strBuffer = strBuffer & _
-                            oDomänenL(i).strDomäne & ";" & _
-                            oDomänenL(i).strKunde & ";" & _
-                            oDomänenL(i).strOrdner.strName & ";" & _
-                            oDomänenL(i).strOrdner.strEID & ";" & _
-                            oDomänenL(i).strOrdner.strSID & vbCrLf
-
+                If SearchIgnoreList(oDomänenL(i).strDomäne) = -1 Then
+                    strBuffer = strBuffer & _
+                                oDomänenL(i).strDomäne & ";" & _
+                                oDomänenL(i).strKunde & ";" & _
+                                oDomänenL(i).strOrdner.strName & ";" & _
+                                oDomänenL(i).strOrdner.strEID & ";" & _
+                                oDomänenL(i).strOrdner.strSID & vbCrLf
+                End If
             End If
         Next
 
@@ -608,6 +613,7 @@
         End If
         Return -1
     End Function
+
 #End Region
 
 #Region "IgnoreListe Funktionen"
