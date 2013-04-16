@@ -12,7 +12,7 @@
     </BootstrapperUrlHistory>
     <FallbackCulture>de-DE</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <ReferencePath>M:\DEV\VB2008\Projekte\KdMails.net\KdMails.net\bin\</ReferencePath>
     <ErrorReportUrlHistory />
   </PropertyGroup>
@@ -23,7 +23,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <RemoteDebugEnabled>false</RemoteDebugEnabled>
     <RemoteDebugMachine>WSDEHN</RemoteDebugMachine>
-    <StartArguments>/Neu</StartArguments>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <RemoteDebugMachine>WSDEHN</RemoteDebugMachine>
