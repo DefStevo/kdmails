@@ -25,6 +25,24 @@ Module mdlHaupt
         _FolderBrowser.RootFolder = Environment.SpecialFolder.MyComputer
 
         If Not Auto_Update() = True Then
+
+            For i As Integer = 0 To My.Application.CommandLineArgs.Count - 1
+                Select Case My.Application.CommandLineArgs(i)
+                    Case "/Neu"
+                        'Prüfen ob Update.log existiert
+                        If System.IO.File.Exists(_strUpdate_Pfad + "\Update.log") Then
+                            FileCopy(_strUpdate_Pfad + "\Update.log", _
+                                     _strApp_Pfad + "\Update.log")
+                        End If
+
+                        If System.IO.File.Exists(_strApp_Pfad + "\Update.log") Then
+                            frmHistorie.ShowDialog()
+                        End If
+
+                End Select
+            Next
+
+
             frmHaupt.ShowDialog()
         End If
     End Sub
@@ -64,6 +82,15 @@ Module mdlHaupt
 
         'Falls Version unterschiedlich Update durchführen
         If Not _strVersion_Update_Remote = "0" And Not _strVersion_Update_Lokal = _strVersion_Update_Remote Then
+            'Sicherungskopie löschen
+            If System.IO.File.Exists(_strApp_Pfad + "\KdMails.net.Update.exe.alt") Then
+                System.IO.File.Delete(_strApp_Pfad + "\KdMails.net.Update.exe.alt")
+            End If
+            'Sicherungkopie erstellen
+            If System.IO.File.Exists(_strApp_Pfad + "\KdMails.net.Update.exe") Then
+                System.IO.File.Move(_strApp_Pfad + "\KdMails.net.Update.exe", _strApp_Pfad + "\KdMails.net.Update.exe.alt")
+            End If
+
             FileCopy(_strUpdate_Pfad + "\KdMails.net.Update.exe", _
                      _strApp_Pfad + "\KdMails.net.Update.exe")
         End If
@@ -77,6 +104,7 @@ Module mdlHaupt
 
         'Falls Versoin unterschiedlich Update durchführen
         If Not _strVersion_Remote = "0" And Not _strVersion_Lokal = _strVersion_Remote Then
+
             If MsgBox("Es steht ein Update zur Verfügung!!!" & vbNewLine & _
                       "Aktuelle Version: " & _strVersion_Lokal & vbNewLine & _
                       "Neue Version: " & _strVersion_Remote & " (" & _strUpdate_Pfad & ")" & vbNewLine & _

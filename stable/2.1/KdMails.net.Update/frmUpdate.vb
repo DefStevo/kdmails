@@ -105,7 +105,7 @@ Public Class frmUpdate
             MsgBox("Fehler beim Update", vbCritical, "KdMails.net: Auto Update")
         Else
             Info_Hinzufuegen("Programm starten ... ", False)
-            Shell(_strLDatei, AppWinStyle.NormalFocus, False)
+            Shell(_strLDatei + " /Neu", AppWinStyle.NormalFocus, False)
             Info_Hinzufuegen("OK", False)
         End If
 

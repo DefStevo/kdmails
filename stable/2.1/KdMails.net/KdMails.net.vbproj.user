@@ -23,6 +23,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <RemoteDebugEnabled>false</RemoteDebugEnabled>
     <RemoteDebugMachine>WSDEHN</RemoteDebugMachine>
+    <StartArguments>/Neu</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <RemoteDebugMachine>WSDEHN</RemoteDebugMachine>
