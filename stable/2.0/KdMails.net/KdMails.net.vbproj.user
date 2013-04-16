@@ -29,5 +29,5 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <RemoteDebugMachine>WSDEHN</RemoteDebugMachine>
-  </PropertyGroup>
+  </PropertyGroup>  
 </Project>
