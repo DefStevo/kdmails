@@ -35,26 +35,26 @@ Public Class frmOptionen
         btnDebug_Click(sender, e)
 
         'Einstellungen einlesen
-        txtServer.Text = frmHaupt.cConfig.GetSettings("DB.Server")
-        txtDatenbank.Text = frmHaupt.cConfig.GetSettings("DB.Datenbank")
-        txtBenutzer.Text = frmHaupt.cConfig.GetSettings("DB.Benutzer")
-        txtKennwort.Text = frmHaupt.cConfig.GetSettings("DB.Kennwort")
+        txtServer.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Server)
+        txtDatenbank.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Datenbank)
+        txtBenutzer.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Benutzer)
+        txtKennwort.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Kennwort)
 
-        txtOrdnerEingang.Text = frmHaupt.cConfig.GetSettings("Ordner.Eingang", 1)
-        txtOrdnerEingangEID.Text = frmHaupt.cConfig.GetSettings("Ordner.Eingang", 2)
-        txtOrdnerEingangSID.Text = frmHaupt.cConfig.GetSettings("Ordner.Eingang", 3)
+        txtOrdnerEingang.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 1)
+        txtOrdnerEingangEID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 2)
+        txtOrdnerEingangSID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 3)
 
-        txtOrdnerAusgang.Text = frmHaupt.cConfig.GetSettings("Ordner.Gesendet", 1)
-        txtOrdnerAusgangEID.Text = frmHaupt.cConfig.GetSettings("Ordner.Gesendet", 2)
-        txtOrdnerAusgangSID.Text = frmHaupt.cConfig.GetSettings("Ordner.Gesendet", 3)
+        txtOrdnerAusgang.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Gesendet, 1)
+        txtOrdnerAusgangEID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Gesendet, 2)
+        txtOrdnerAusgangSID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Gesendet, 3)
 
-        txtOrdnerZiel.Text = frmHaupt.cConfig.GetSettings("Ordner.Ziel", 1)
-        txtOrdnerZielEID.Text = frmHaupt.cConfig.GetSettings("Ordner.Ziel", 2)
-        txtOrdnerZielSID.Text = frmHaupt.cConfig.GetSettings("Ordner.Ziel", 3)
+        txtOrdnerZiel.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Ziel, 1)
+        txtOrdnerZielEID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Ziel, 2)
+        txtOrdnerZielSID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Ziel, 3)
 
-        If frmHaupt.cConfig.GetSettings("Mail.KopierenVerschieben") = 0 Then
+        If frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben) = 0 Then
             optKopieren.Checked = True
-        ElseIf frmHaupt.cConfig.GetSettings("Mail.KopierenVerschieben") = 1 Then
+        ElseIf frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben) = 1 Then
             optVerschieben.Checked = True
         End If
 
@@ -125,17 +125,17 @@ Public Class frmOptionen
 #Region "Standard"
     Private Sub btnSpeichern_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSpeichern.Click
         'Einstellungen Speichern
-        frmHaupt.cConfig.SetSettings("DB.Server", txtServer.Text)
-        frmHaupt.cConfig.SetSettings("DB.Datenbank", txtDatenbank.Text)
-        frmHaupt.cConfig.SetSettings("DB.Benutzer", txtBenutzer.Text)
-        frmHaupt.cConfig.SetSettings("DB.Kennwort", txtKennwort.Text)
-        frmHaupt.cConfig.SetSettings("Ordner.Eingang", txtOrdnerEingang.Text, txtOrdnerEingangEID.Text, txtOrdnerEingangSID.Text)
-        frmHaupt.cConfig.SetSettings("Ordner.Gesendet", txtOrdnerAusgang.Text, txtOrdnerAusgangEID.Text, txtOrdnerAusgangSID.Text)
-        frmHaupt.cConfig.SetSettings("Ordner.Ziel", txtOrdnerZiel.Text, txtOrdnerZielEID.Text, txtOrdnerZielSID.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Server, txtServer.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Datenbank, txtDatenbank.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Benutzer, txtBenutzer.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Kennwort, txtKennwort.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Eingang, txtOrdnerEingang.Text, txtOrdnerEingangEID.Text, txtOrdnerEingangSID.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Gesendet, txtOrdnerAusgang.Text, txtOrdnerAusgangEID.Text, txtOrdnerAusgangSID.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Ziel, txtOrdnerZiel.Text, txtOrdnerZielEID.Text, txtOrdnerZielSID.Text)
         If optKopieren.Checked = True Then
-            frmHaupt.cConfig.SetSettings("Mail.KopierenVerschieben", 0)
+            frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Mail_KopierenVerschieben, 0)
         ElseIf optVerschieben.Checked = True Then
-            frmHaupt.cConfig.SetSettings("Mail.KopierenVerschieben", 1)
+            frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Mail_KopierenVerschieben, 1)
         End If
 
         AddDGToIgnoreList()
@@ -256,7 +256,6 @@ Public Class frmOptionen
                "   EID: " & dgDomain.Rows(dgDomain.SelectedCells.Item(0).RowIndex).Cells("cOutlookEID").Value & vbNewLine & _
                "   SID wird nur bei Doppelklick auf die Spalte angezeigt", MsgBoxStyle.Information, "KdMails.net - Domänen")
     End Sub
-
 
     Private Sub dgOrdner_CellDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgOrdner.CellDoubleClick
         MsgBox("Inhalt des Feldes: " & vbNewLine & dgOrdner.SelectedCells.Item(0).Value & vbNewLine & vbNewLine & _

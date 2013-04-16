@@ -54,6 +54,20 @@
             strValue3 = Value3
         End Sub
     End Structure
+
+    Public Enum ESettings
+        None = 0
+        DB_Server
+        DB_Datenbank
+        DB_Benutzer
+        DB_Kennwort
+        Mail_KopierenVerschieben
+        Ordner_Eingang
+        Ordner_Gesendet
+        Ordner_Ziel
+        LetzerLauf_Datum
+        LetzerLauf_Zeit
+    End Enum
 #End Region
 
 #Region "Deklarationen"
@@ -654,11 +668,11 @@
 #End Region
 
 #Region "Settings Funktionen"
-    Function SearchSettings(ByVal Name As String) As Integer
+    Function SearchSettings(ByVal eName As ESettings, Optional ByVal sName As String = "") As Integer
         Dim bMatchSetting As Boolean = False
 
         For i As Integer = 0 To oSettingsL.Count - 1
-            If Name = oSettingsL(i).strName Then
+            If eName.ToString = oSettingsL(i).strName Or sName = oSettingsL(i).strName Then
                 bMatchSetting = True
             End If
 
@@ -676,7 +690,7 @@
             Return False
         End If
 
-        If Not GetSettings(Name) = Nothing Then
+        If Not SearchSettings(ESettings.None, Name) = -1 Then
             Return False
         End If
 
@@ -687,11 +701,11 @@
 
     End Function
 
-    Function GetSettings(ByVal Name As String, Optional ByVal Value As Integer = 1) As String
+    Function GetSettings(ByVal Name As ESettings, Optional ByVal Value As Integer = 1) As String
 
-        If Not Name Is Nothing Then
+        If Not Name.ToString Is Nothing Then
             For i As Integer = 0 To oSettingsL.Count - 1
-                If Name = oSettingsL(i).strName Then
+                If Name.ToString = oSettingsL(i).strName Then
                     With oSettingsL(i)
                         Select Case Value
                             Case 3
@@ -710,7 +724,7 @@
 
     End Function
 
-    Function SetSettings(ByVal Name As String, Optional ByVal Value1 As String = Nothing, Optional ByVal Value2 As String = Nothing, Optional ByVal Value3 As String = Nothing)
+    Function SetSettings(ByVal Name As ESettings, Optional ByVal Value1 As String = Nothing, Optional ByVal Value2 As String = Nothing, Optional ByVal Value3 As String = Nothing)
         Dim i As Integer
 
         i = SearchSettings(Name)
@@ -729,12 +743,11 @@
 
             oSettingsL(i) = oSettingsZ
         Else
-            AddSettings(Name, Value1, Value2, Value3)
+            AddSettings(Name.ToString, Value1, Value2, Value3)
         End If
 
         Return True
     End Function
-
 
 #End Region
 

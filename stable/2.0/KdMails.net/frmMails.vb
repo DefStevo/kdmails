@@ -131,10 +131,10 @@ Public Class frmMails
             dgMails.Rows.Remove(dgMails.Rows(0))
         Loop
 
-        If frmHaupt.cConfig.GetSettings("Mail.KopierenVerschieben") = 0 Then
+        If frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben) = 0 Then
             _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren)) = _strCopy
             btnKopieren.Text = _strCopy
-        ElseIf frmHaupt.cConfig.GetSettings("Mail.KopierenVerschieben") = 1 Then
+        ElseIf frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben) = 1 Then
             _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren)) = _strMove
             btnKopieren.Text = _strMove
         End If
@@ -142,11 +142,11 @@ Public Class frmMails
         For x As Integer = 0 To 1
 
             If x = 0 Then
-                frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMails(frmHaupt.cConfig.GetSettings("Ordner.Eingang", 2), _
-                                                                     frmHaupt.cConfig.GetSettings("Ordner.Eingang", 3))
+                frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMails(frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 2), _
+                                                                     frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 3))
             ElseIf x = 1 Then
-                frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMails(frmHaupt.cConfig.GetSettings("Ordner.Gesendet", 2), _
-                                                                     frmHaupt.cConfig.GetSettings("Ordner.Gesendet", 3))
+                frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMails(frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Gesendet, 2), _
+                                                                     frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Gesendet, 3))
             End If
 
             Do While Not frmHaupt.cOutlook.oMail Is Nothing
@@ -281,11 +281,11 @@ Public Class frmMails
         Dim i As Integer = 0
 
         Do While i <= dgMails.Rows.Count - 1
-            If _dgItem(_GetDgColumnNameByEnum(_dgMailColumns.cKopieren), i) = True Then
+            If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren), i) = True Then
                 frmHaupt.cOutlook.CopyMail(_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i), _
                                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
                                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i), _
-                                           frmHaupt.cConfig.GetSettings("Mail.KopierenVerschieben"))
+                                           frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben))
 
                 dgMails.Rows.Remove(dgMails.Rows(i))
 
@@ -295,6 +295,10 @@ Public Class frmMails
 
             i += 1
         Loop
+
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LetzerLauf_Datum, frmHaupt.strDate)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LetzerLauf_Zeit, frmHaupt.strTime)
+        frmHaupt.cConfig.WriteConfigSettings()
 
         Cursor.Current = Cursors.Default
     End Sub
