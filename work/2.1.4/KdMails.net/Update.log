@@ -1,0 +1,35 @@
+﻿!2.1.3.1|03.10.2011
+- Abfrage auf LDAP (AD) liefert bei Ex-Kollegen einen Fehler
+!2.1.3|27.05.2011
+- Ungelesene E-Mails (Posteingang) werden nicht kopiert/verschoben
+  . Diese werden gespeichert und beim nächsten Lauf analysiert
+!2.1.2|17.05.2011
+- Unterstützung/Anzeige der Änderungshistorie
+!2.1.1|14.05.2011
+- Auto Update Funktion (KdMails.net.Update.exe)
+!2.1.0|22.04.2011
+- Ermittlung der E-Mail Adressen aus (Active Directory) mittels LDAP
+- Icons für Status verwenden (Outlook, LDAP, DB)
+!2.0.5|21.04.2011
+- Checkbox Kopieren/Verschieben aktiviert
+- Sortierung der Liste ermöglicht
+- Domänen aus IgnoreList werden aus KdMails.Domänen.cfg automatisch entfernt
+- Orderermittlung aufgrund Kompletter Mail Adresse eingeführt (für Ignorierte Domänen)
+!2.0.4|20.04.2011
+- Verweis Microsoft.Office.Core entfernt
+- Verwendung von Kurzen Ordnernamen
+!2.0.3|11.04.2011
+- User Property wird in Outlook nicht mehr gesetzt
+- Änderung der Debug/Release Optionen
+!2.0.2|10.04.2011
+- Ermittlung der Mails aufgrund des Empfangsdatum
+!2.0.1|09.04.2011
+- Einführung der KdMails.Settings.cfg
+!2.0.0|26.02.2011
+- Unterstützung Posteingang
+- Unterstützung Ignore-Liste
+- Optische Verbesserung
+- Performance Optimierung
+- Einfaches Fehlerhandling
+!1.0.0|2010
+- Portierung von VB6 nach .NET

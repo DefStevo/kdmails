@@ -1,0 +1,18 @@
+﻿--Version 2.x
+    . Changelog einbauen
+	. Fehlerhandling mit Auto Mail Funktion
+	. Protokollierung von Kopierten/Verschobenen Mails
+	. Batchfunktion
+
+--Version 2.1.1.0
+    . Auto Update => Testphase
+
+--Version 2.1.0
+	. Ermitteln der E-Mail Adresse bei Adresstype = "EX" aus Active Directory per LDAP => Testphase
+
+--Version 2.0.5
+	. Checkbox Kopieren/Verschieben aktivieren (E-Mails sollen nicht verschoben werden) => DONE
+	. Sortierung der Liste (frmMails.dgMails) => DONE
+	. Domänen der Ignore List sollten aus der Config-File für die Domänen entfernt werden (Beim Starten/Einlesen und Speichern) => DONE
+	. Beim Auswahl eines Ordners für Eintrag aus IgnoreListe sollte die komplette E-Mail in den Domänen eingetragen werden. (Beispiel sdehner@gmx.at) => DONE
+
