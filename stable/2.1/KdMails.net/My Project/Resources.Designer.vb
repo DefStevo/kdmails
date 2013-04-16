@@ -94,5 +94,33 @@ Namespace My.Resources
                 Return CType(obj,System.Drawing.Icon)
             End Get
         End Property
+        
+        Friend ReadOnly Property Status_CO() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Status_CO", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property Status_NA() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Status_NA", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property Status_OK() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Status_OK", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property Status_UK() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Status_UK", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
     End Module
 End Namespace

@@ -55,6 +55,10 @@
         End Sub
     End Structure
 
+
+#End Region
+
+#Region "Enum"
     Public Enum ESettings
         None = 0
         DB_Server
@@ -67,7 +71,10 @@
         Ordner_Ziel
         LetzerLauf_Datum
         LetzerLauf_Zeit
+        LDAP_Domain
+
     End Enum
+
 #End Region
 
 #Region "Deklarationen"

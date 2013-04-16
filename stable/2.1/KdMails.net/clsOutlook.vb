@@ -1,6 +1,10 @@
-﻿Imports Microsoft.Office.Interop
+﻿#Region "Imports"
+Imports Microsoft.Office.Interop
+
+#End Region
 
 Public Class clsOutlook
+
 #Region "Deklarationen"
     Private _MSOutlook As Outlook._Application
     Private _MSNameSpace As Outlook.NameSpace
@@ -22,7 +26,17 @@ Public Class clsOutlook
 
 #End Region
 
+#Region "Properties"
+    ReadOnly Property Status As Boolean
+        Get
+            Return _bInitStatus
+        End Get
+    End Property
+
+#End Region
+
 #Region "Funktionen"
+#Region "Allgemein"
     Function InitOutlook() As Boolean
         Try
             _MSOutlook = New Outlook.Application
@@ -55,6 +69,8 @@ Public Class clsOutlook
             _bInitStatus = False
         End If
     End Function
+
+#End Region
 
 #Region "OrdnerFunktionen"
     Function FolderSelection(ByRef OrdnerPfad As String, ByRef OrdnerEID As String, ByRef OrdnerSID As String) As Boolean

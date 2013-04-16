@@ -1,25 +1,26 @@
-﻿Imports Microsoft.Office.Interop
-
-Public Class frmMails
-
-#Region "Properties/Enum/Const"
-
-#Region "Const"
-    Private Const _strCopy = "Kopieren"
-    Private Const _strMove = "Verschieben"
-    Private Const _strEingang = "E"
-    Private Const _strAusgang = "A"
-    Private Const _strIgnore = "--- IGNORE ---"
+﻿#Region "Imports"
+Imports Microsoft.Office.Interop
 
 #End Region
 
+Public Class frmMails
+
+#Region "Enum"
+    Private Enum _Konstante
+        Kopieren
+        Verschieben
+        E
+        A
+        IGNORE
+        EX
+    End Enum
+
     Private Enum _MailInfos As Integer
-        SenderEMailAdress = 0
-        ReceivedTime = 1
-        Subject = 2
-        EMailTo = 3
-        Recipients = 4
-        EntryID = 5
+        EMailFrom = 0
+        EMailTo = 1
+        ReceivedTime = 2
+        Subject = 3
+        EntryID = 4
     End Enum
 
     Private Enum _dgMailColumns As Integer
@@ -33,6 +34,9 @@ Public Class frmMails
         cMailAdr = 7
     End Enum
 
+#End Region
+
+#Region "Properties"
     Private Property _dgItem(ByVal Item As String, ByVal Index As Integer) As String
         Get
             Return dgMails.Item(Item, Index).Value
@@ -92,18 +96,15 @@ Public Class frmMails
                         Return .SenderEmailAddress
 
                     Case 1
-                        Return .ReceivedTime.ToString
-
-                    Case 2
-                        Return .Subject
-
-                    Case 3
-                        Return .To
-
-                    Case 4
                         Return .Recipients(1).Address
 
-                    Case 5
+                    Case 2
+                        Return .ReceivedTime.ToString
+
+                    Case 3
+                        Return .Subject
+
+                    Case 4
                         Return .EntryID
 
                 End Select
@@ -124,25 +125,29 @@ Public Class frmMails
         Cursor.Current = Cursors.WaitCursor
 
         Dim i As Integer = 0
-        Dim sDomain As String = ""
-        Dim sAdresse As String = ""
+        Dim strDomain As String = ""
+        Dim strAdresse As String = ""
         Dim bIgnoreListe As Boolean = False
         Dim bIgnoreListeKomplett As Boolean = False
 
+        'Datagrid leeren
         Do While dgMails.Rows.Count > 0
             dgMails.Rows.Remove(dgMails.Rows(0))
         Loop
 
+        'Bezeichnungen setzen (Kopieren/Verschieben)
         If frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben) = 0 Then
-            _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren)) = _strCopy
-            btnKopieren.Text = _strCopy
+            _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren)) = _Konstante.Kopieren.ToString
+            btnKopieren.Text = _Konstante.Kopieren.ToString
         ElseIf frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben) = 1 Then
-            _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren)) = _strMove
-            btnKopieren.Text = _strMove
+            _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren)) = _Konstante.Verschieben.ToString
+            btnKopieren.Text = _Konstante.Verschieben.ToString
         End If
 
+        'Durchlauf für Posteingang x = 0, Gesendete Objekte x = 1
         For x As Integer = 0 To 1
 
+            'E-Mails laden
             If x = 0 Then
                 frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMails(frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 2), _
                                                                      frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 3))
@@ -151,79 +156,80 @@ Public Class frmMails
                                                                      frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Gesendet, 3))
             End If
 
+            'Schleife über alle E-Mails des Ordners
             Do While Not frmHaupt.cOutlook.oMail Is Nothing
+                Me.Refresh()
+
                 dgMails.Rows.Add()
 
                 _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren), i) = True
 
-                If x = 0 Then
-                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _strEingang
+                If x = 0 Then 'Posteingang
+                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.E.ToString
 
-                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMail), i) = _GetMailInfo(_MailInfos.SenderEMailAdress) & ": " & _
-                                                                               _GetMailInfo(_MailInfos.ReceivedTime) & vbNewLine & _
-                                                                               _GetMailInfo(_MailInfos.Subject)
+                    'E-Mail Adresse setzen
+                    strAdresse = _GetMailInfo(_MailInfos.EMailFrom)
 
-                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i) = _GetMailInfo(_MailInfos.SenderEMailAdress)
+                ElseIf x = 1 Then 'Gesendet Objekte
+                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.A.ToString
 
-                    If Not _GetMailInfo(_MailInfos.SenderEMailAdress) = Nothing Then
-                        sAdresse = _GetMailInfo(_MailInfos.SenderEMailAdress)
+                    'E-Mail Adresse setzen
+                    strAdresse = _GetMailInfo(_MailInfos.EMailTo)
 
-                        If Not _GetMailInfo(_MailInfos.SenderEMailAdress).IndexOf("@") = -1 Then
-                            sDomain = _GetMailInfo(_MailInfos.SenderEMailAdress).Split("@")(1).ToString
-                        Else
-                            sDomain = sAdresse
+                End If
+
+                'Korrekte Adresse Ermitteln
+                If Not strAdresse = Nothing Then
+                    If Not strAdresse.ToUpper.IndexOf("/O=RSC") = -1 Then
+                        'Wenn LDAP verfügbar
+                        If frmHaupt.cLDAP.Status = True Then
+                            'Umschlüsselung X400 über LDAP
+                            strAdresse = frmHaupt.cLDAP.SearchLDAPEMail(strAdresse)
+
                         End If
                     End If
 
-                ElseIf x = 1 Then
-                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _strAusgang
-
-                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMail), i) = _GetMailInfo(_MailInfos.EMailTo) & ": " & _
-                                                                               _GetMailInfo(_MailInfos.ReceivedTime) & vbNewLine & _
-                                                                               _GetMailInfo(_MailInfos.Subject)
-
-                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i) = _GetMailInfo(_MailInfos.Recipients)
-
-                    sAdresse = _GetMailInfo(_MailInfos.Recipients)
-
-                    If Not _GetMailInfo(_MailInfos.Recipients).IndexOf("@") = -1 Then
-                        sDomain = _GetMailInfo(_MailInfos.Recipients).Split("@")(1).ToString
+                    'Domäne aus Adresse ermtteln
+                    If Not strAdresse.IndexOf("@") - 1 Then
+                        strDomain = strAdresse.Split("@")(1).ToString
 
                     Else
-                        sDomain = sAdresse
+                        'Wenn LDAP nicht verfügbar mit X400 Adresse weiterarbeiten
+                        strDomain = strAdresse
 
                     End If
+
                 End If
+
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMail), i) = strAdresse & ": " & _
+                                                                           _GetMailInfo(_MailInfos.ReceivedTime) & vbNewLine & _
+                                                                           _GetMailInfo(_MailInfos.Subject)
+
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i) = strAdresse
 
                 _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i) = _GetMailInfo(_MailInfos.EntryID)
 
                 bIgnoreListe = False
                 bIgnoreListeKomplett = False
 
-
                 'IgnoreList nach Domäne durchsuchen
-                If Not frmHaupt.cConfig.SearchIgnoreList("@" & sDomain) = -1 Then
+                If Not frmHaupt.cConfig.SearchIgnoreList("@" & strDomain) = -1 Then
                     'Domäne in IgnoreList gefunden (bIgnore wird Temporär auf True gesetzt)
                     bIgnoreListe = True
 
                     'Durchsuche ob für die Komplette E-Mail Adresse ein Eintrag in den Domänen vorhanden ist
-                    If Not frmHaupt.cConfig.SearchDomain(sAdresse) = -1 Then
+                    If Not frmHaupt.cConfig.SearchDomain(strAdresse) = -1 Then
                         bIgnoreListe = False
                         bIgnoreListeKomplett = True
+
                     End If
 
-                ElseIf x = 0 Then
-                    'Domäne nicht in IgnoreList gefunden (Suche nach kompletter Adresse)
-                    If Not frmHaupt.cConfig.SearchIgnoreList(_GetMailInfo(_MailInfos.SenderEMailAdress)) = -1 Then
+                Else 'Domäne nicht in IgnoreList gefunden (Suche nach kompletter Adresse)
+                    If Not frmHaupt.cConfig.SearchIgnoreList(strAdresse) = -1 Then
                         bIgnoreListe = True
 
                     End If
-                ElseIf x = 1 Then
-                    'Domäne nicht in IgnoreList gefunden (Suche nach kompletter Adresse)
-                    If Not frmHaupt.cConfig.SearchIgnoreList(_GetMailInfo(_MailInfos.EMailTo)) = -1 Then
-                        bIgnoreListe = True
 
-                    End If
                 End If
 
                 'Adresse nicht in IgnoreListe
@@ -233,15 +239,16 @@ Public Class frmMails
                     If bIgnoreListeKomplett = True Then
 
                         'Suche nach Ordner anhand der E-Mail Adresse
-                        frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain(sAdresse), _
+                        frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain(strAdresse), _
                                                   Nothing, _
                                                   Nothing, _
                                                   _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i), _
                                                   _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
                                                   _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
-                    Else
-                        'Suche nach Ordner anhand der Domäne
-                        frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain("@" & sDomain), _
+
+                    Else 'Suche nach Ordner anhand der Domäne
+
+                        frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain("@" & strDomain), _
                                                    Nothing, _
                                                    Nothing, _
                                                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i), _
@@ -249,39 +256,52 @@ Public Class frmMails
                                                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
                     End If
 
-                Else
-                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = _strIgnore
+                Else 'Eintrag ist in IgnoreList
+                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.IGNORE.ToString + " ---"
+
                 End If
 
+                'Nächste Mail laden
                 frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetNextMail
                 i += 1
 
-                btnKopieren.Enabled = True
             Loop
 
         Next
+
+        'Button Enablen
+        btnKopieren.Enabled = True
 
         Cursor.Current = Cursors.Default
 
     End Sub
 
     Private Sub dgMails_CellDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgMails.CellDoubleClick
+        'Temp-String deklarieren
         Dim strTemp As String = ""
+
+        'Doppelklick auf Spalte 1 (MSGBOX)
         If _dgSelectedColumn = 1 Then
             MsgBox(_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMail), _dgSelected), _
                    MsgBoxStyle.OkOnly, _
                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), _dgSelected))
 
-        ElseIf _dgSelectedColumn = 3 Then
+        ElseIf _dgSelectedColumn = 3 Then 'Doppelklick auf Spalte Ordner (Ordner Auswahl)
+            'String merken (falls ---IGNORE---)
             strTemp = _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), _dgSelected)
+
+            'Ordnerauswahl anzeigen
             frmHaupt.cOutlook.FolderSelection(_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), _dgSelected), _
                                               _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), _dgSelected), _
                                               _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), _dgSelected))
 
+            'Wenn Ordner ausgewählt wurde
             If Not _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), _dgSelected) = Nothing Then
 
-                If Not strTemp = _strIgnore Then
-                    'Domäne ist nicht auf IgnoreList
+                'Wenn nicht IgnoreListe vorhanden
+                If Not strTemp = "--- " + _Konstante.IGNORE.ToString + " ---" Then
+
+                    'E-Mail Adresse enthält ein @ Zeichen
                     If Not _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), _dgSelected).ToString.IndexOf("@") = -1 Then
                         frmHaupt.cConfig.AddDomain("@" + _
                                                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), _dgSelected).ToString.Split("@")(1).ToString, _
@@ -290,7 +310,7 @@ Public Class frmMails
                                                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), _dgSelected), _
                                                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), _dgSelected))
 
-                    Else
+                    Else 'E-Mail Adresse enhält kein @ Zeichen (X400 Adresse)
                         frmHaupt.cConfig.AddDomain("@" + _
                                                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), _dgSelected).ToString, _
                                                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), _dgSelected).ToString.Split(" - ")(0).ToString, _
@@ -299,8 +319,8 @@ Public Class frmMails
                                                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), _dgSelected))
 
                     End If
-                Else
-                    'Domäne ist nicht auf IgnoreList (Eintragen der kompletten E-Mail Adresse)
+
+                Else 'Domäne ist auf IgnoreList (Eintragen der kompletten E-Mail Adresse)
                     frmHaupt.cConfig.AddDomain(_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), _dgSelected).ToString, _
                                                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), _dgSelected).ToString.Split(" - ")(0).ToString, _
                                                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), _dgSelected), _
@@ -315,7 +335,6 @@ Public Class frmMails
 #End Region
 
 #Region "Buttons"
-
     Private Sub btnAbbrechen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbbrechen.Click
         Me.Close()
     End Sub
@@ -324,7 +343,9 @@ Public Class frmMails
         Cursor.Current = Cursors.WaitCursor
         Dim i As Integer = 0
 
+        'Alle E-Mail kopieren/verschieben
         Do While dgMails.Rows.Count > 0
+            'E-Mail ist zum kopieren/verschieben markiert
             If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren), i) = True Then
                 frmHaupt.cOutlook.CopyMail(_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i), _
                                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
@@ -333,10 +354,12 @@ Public Class frmMails
 
             End If
 
+            'Zeile aus Datagrid entfernen
             dgMails.Rows.Remove(dgMails.Rows(i))
 
         Loop
 
+        'Schreiben des Zeitpunkt Letzer Lauf (Datum/Uhrzeit des Programmstart)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LetzerLauf_Datum, frmHaupt.strDate)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LetzerLauf_Zeit, frmHaupt.strTime)
         frmHaupt.cConfig.WriteConfigSettings()
