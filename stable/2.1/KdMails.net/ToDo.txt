@@ -1,4 +1,13 @@
-﻿--Version 2.1.0
+﻿--Version 2.x
+    . Changelog einbauen
+	. Fehlerhandling mit Auto Mail Funktion
+	. Protokollierung von Kopierten/Verschobenen Mails
+	. Batchfunktion
+
+--Version 2.1.1.0
+    . Auto Update => Testphase
+
+--Version 2.1.0
 	. Ermitteln der E-Mail Adresse bei Adresstype = "EX" aus Active Directory per LDAP => Testphase
 
 --Version 2.0.5

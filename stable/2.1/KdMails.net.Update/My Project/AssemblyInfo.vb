@@ -1,6 +1,4 @@
-﻿Imports System.Resources
-
-Imports System
+﻿Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
@@ -10,16 +8,16 @@ Imports System.Runtime.InteropServices
 
 ' Die Werte der Assemblyattribute überprüfen
 
-<Assembly: AssemblyDescription("KdMails.net")> 
+<Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("Stevo Software")> 
-<Assembly: AssemblyProduct("KdMails.net")> 
+<Assembly: AssemblyProduct("KdMails.net.Update")> 
 <Assembly: AssemblyCopyright("Copyright © Stevo Software 2011")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(False)> 
+<Assembly: ComVisible(False)>
 
 'Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-<Assembly: Guid("f2f22274-bdcf-4dcf-aee5-0fb9c8189cfb")> 
+<Assembly: Guid("b89a6f54-8217-4ead-a98d-6fd434815bf9")> 
 
 ' Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 '
@@ -32,8 +30,7 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("2.1.1.0")> 
-<Assembly: AssemblyFileVersion("2.1.1.0")> 
+<Assembly: AssemblyVersion("1.0.0.0")> 
+<Assembly: AssemblyFileVersion("1.0.0.0")> 
 
-<Assembly: NeutralResourcesLanguageAttribute("de")> 
-<Assembly: AssemblyTitleAttribute("KdMails.net")> 
+<Assembly: AssemblyTitleAttribute("KdMails.net.Update")> 
