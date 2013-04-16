@@ -115,7 +115,7 @@ Public Class frmHaupt
     End Sub
 
     Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picMail.Click
-        frmHistorie.ShowDialog()
+        frmChangeLog.ShowDialog()
     End Sub
 
 #End Region
