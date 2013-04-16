@@ -114,6 +114,10 @@ Public Class frmHaupt
         Application.Exit()
     End Sub
 
+    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picMail.Click
+        frmHistorie.ShowDialog()
+    End Sub
+
 #End Region
 
 #Region "Buttons"
@@ -140,5 +144,6 @@ Public Class frmHaupt
     End Sub
 
 #End Region
+
 
 End Class

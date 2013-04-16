@@ -24,7 +24,7 @@ Partial Class frmHaupt
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmHaupt))
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.picMail = New System.Windows.Forms.PictureBox()
         Me.btnLos = New System.Windows.Forms.Button()
         Me.btnOptionen = New System.Windows.Forms.Button()
         Me.frmHauptStatus = New System.Windows.Forms.StatusStrip()
@@ -33,20 +33,20 @@ Partial Class frmHaupt
         Me.stDB = New System.Windows.Forms.ToolStripStatusLabel()
         Me.stStatus = New System.Windows.Forms.ToolStripStatusLabel()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picMail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.frmHauptStatus.SuspendLayout()
         Me.SuspendLayout()
         '
-        'PictureBox1
+        'picMail
         '
-        Me.PictureBox1.BackgroundImage = Global.KdMails.net.My.Resources.Resources.Hint
-        Me.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2, 3, 2, 3)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(78, 75)
-        Me.PictureBox1.TabIndex = 0
-        Me.PictureBox1.TabStop = False
+        Me.picMail.BackgroundImage = Global.KdMails.net.My.Resources.Resources.Hint
+        Me.picMail.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.picMail.Location = New System.Drawing.Point(0, 0)
+        Me.picMail.Margin = New System.Windows.Forms.Padding(2, 3, 2, 3)
+        Me.picMail.Name = "picMail"
+        Me.picMail.Size = New System.Drawing.Size(78, 75)
+        Me.picMail.TabIndex = 0
+        Me.picMail.TabStop = False
         '
         'btnLos
         '
@@ -143,7 +143,7 @@ Partial Class frmHaupt
         Me.Controls.Add(Me.frmHauptStatus)
         Me.Controls.Add(Me.btnOptionen)
         Me.Controls.Add(Me.btnLos)
-        Me.Controls.Add(Me.PictureBox1)
+        Me.Controls.Add(Me.picMail)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
@@ -153,14 +153,14 @@ Partial Class frmHaupt
         Me.MinimizeBox = False
         Me.Name = "frmHaupt"
         Me.Text = "KdMails.net - Kundenmails kopieren"
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picMail, System.ComponentModel.ISupportInitialize).EndInit()
         Me.frmHauptStatus.ResumeLayout(False)
         Me.frmHauptStatus.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents picMail As System.Windows.Forms.PictureBox
     Friend WithEvents btnLos As System.Windows.Forms.Button
     Friend WithEvents btnOptionen As System.Windows.Forms.Button
     Friend WithEvents frmHauptStatus As System.Windows.Forms.StatusStrip
