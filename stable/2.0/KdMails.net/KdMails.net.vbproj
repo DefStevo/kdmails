@@ -179,6 +179,7 @@
     <Content Include="Config\KdMails.Ignore.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ToDo.txt" />
     <None Include="Config\KdMails.Settings.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

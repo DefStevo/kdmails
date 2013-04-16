@@ -140,9 +140,9 @@ Public Class frmOptionen
 
         AddDGToIgnoreList()
 
+        frmHaupt.cConfig.WriteConfigIgnore()
         frmHaupt.cConfig.WriteConfigDomain()
         frmHaupt.cConfig.WriteConfigFolder()
-        frmHaupt.cConfig.WriteConfigIgnore()
         frmHaupt.cConfig.WriteConfigSettings()
     End Sub
 

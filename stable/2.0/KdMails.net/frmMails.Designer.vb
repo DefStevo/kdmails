@@ -27,6 +27,8 @@ Partial Class frmMails
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMails))
         Me.dgMails = New System.Windows.Forms.DataGridView()
+        Me.btnKopieren = New System.Windows.Forms.Button()
+        Me.btnAbbrechen = New System.Windows.Forms.Button()
         Me.cEA = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cMail = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cMailEID = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -35,8 +37,6 @@ Partial Class frmMails
         Me.cOrdnerSID = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cCopy = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.cMailAdress = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.btnKopieren = New System.Windows.Forms.Button()
-        Me.btnAbbrechen = New System.Windows.Forms.Button()
         CType(Me.dgMails, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -44,7 +44,7 @@ Partial Class frmMails
         '
         Me.dgMails.AllowUserToAddRows = False
         Me.dgMails.AllowUserToDeleteRows = False
-        Me.dgMails.AllowUserToResizeColumns = False
+        Me.dgMails.AllowUserToOrderColumns = True
         Me.dgMails.AllowUserToResizeRows = False
         Me.dgMails.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.dgMails.ColumnHeadersHeight = 20
@@ -53,7 +53,6 @@ Partial Class frmMails
         Me.dgMails.Location = New System.Drawing.Point(0, 0)
         Me.dgMails.MultiSelect = False
         Me.dgMails.Name = "dgMails"
-        Me.dgMails.ReadOnly = True
         Me.dgMails.RowHeadersWidth = 15
         Me.dgMails.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgMails.RowTemplate.Height = 30
@@ -62,6 +61,27 @@ Partial Class frmMails
         Me.dgMails.ShowEditingIcon = False
         Me.dgMails.Size = New System.Drawing.Size(760, 320)
         Me.dgMails.TabIndex = 1
+        '
+        'btnKopieren
+        '
+        Me.btnKopieren.Enabled = False
+        Me.btnKopieren.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnKopieren.Location = New System.Drawing.Point(1, 321)
+        Me.btnKopieren.Name = "btnKopieren"
+        Me.btnKopieren.Size = New System.Drawing.Size(379, 21)
+        Me.btnKopieren.TabIndex = 2
+        Me.btnKopieren.Text = "&Kopieren"
+        Me.btnKopieren.UseVisualStyleBackColor = True
+        '
+        'btnAbbrechen
+        '
+        Me.btnAbbrechen.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnAbbrechen.Location = New System.Drawing.Point(381, 321)
+        Me.btnAbbrechen.Name = "btnAbbrechen"
+        Me.btnAbbrechen.Size = New System.Drawing.Size(379, 21)
+        Me.btnAbbrechen.TabIndex = 3
+        Me.btnAbbrechen.Text = "A&bbrechen"
+        Me.btnAbbrechen.UseVisualStyleBackColor = True
         '
         'cEA
         '
@@ -122,7 +142,6 @@ Partial Class frmMails
         Me.cCopy.DefaultCellStyle = DataGridViewCellStyle3
         Me.cCopy.HeaderText = "Kopieren"
         Me.cCopy.Name = "cCopy"
-        Me.cCopy.ReadOnly = True
         Me.cCopy.Width = 50
         '
         'cMailAdress
@@ -130,29 +149,7 @@ Partial Class frmMails
         Me.cMailAdress.HeaderText = "E-Mail Adresse"
         Me.cMailAdress.Name = "cMailAdress"
         Me.cMailAdress.ReadOnly = True
-        Me.cMailAdress.Visible = False
         Me.cMailAdress.Width = 5
-        '
-        'btnKopieren
-        '
-        Me.btnKopieren.Enabled = False
-        Me.btnKopieren.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnKopieren.Location = New System.Drawing.Point(1, 321)
-        Me.btnKopieren.Name = "btnKopieren"
-        Me.btnKopieren.Size = New System.Drawing.Size(379, 21)
-        Me.btnKopieren.TabIndex = 2
-        Me.btnKopieren.Text = "&Kopieren"
-        Me.btnKopieren.UseVisualStyleBackColor = True
-        '
-        'btnAbbrechen
-        '
-        Me.btnAbbrechen.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnAbbrechen.Location = New System.Drawing.Point(381, 321)
-        Me.btnAbbrechen.Name = "btnAbbrechen"
-        Me.btnAbbrechen.Size = New System.Drawing.Size(379, 21)
-        Me.btnAbbrechen.TabIndex = 3
-        Me.btnAbbrechen.Text = "A&bbrechen"
-        Me.btnAbbrechen.UseVisualStyleBackColor = True
         '
         'frmMails
         '
