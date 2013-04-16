@@ -73,6 +73,11 @@ Partial Class frmOptionen
         Me.grpLDAP = New System.Windows.Forms.GroupBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.txtLDAP = New System.Windows.Forms.TextBox()
+        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.grpAutoUpdate = New System.Windows.Forms.GroupBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.txtUpdatePfad = New System.Windows.Forms.TextBox()
+        Me.btnUpdatePfad = New System.Windows.Forms.Button()
         Me.grpDatenbank.SuspendLayout()
         CType(Me.dgDomain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpOutlook.SuspendLayout()
@@ -80,12 +85,13 @@ Partial Class frmOptionen
         Me.grpIgnore.SuspendLayout()
         CType(Me.dgIgnoreList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpLDAP.SuspendLayout()
+        Me.grpAutoUpdate.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnSpeichern
         '
         Me.btnSpeichern.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnSpeichern.Location = New System.Drawing.Point(1, 317)
+        Me.btnSpeichern.Location = New System.Drawing.Point(1, 361)
         Me.btnSpeichern.Name = "btnSpeichern"
         Me.btnSpeichern.Size = New System.Drawing.Size(140, 21)
         Me.btnSpeichern.TabIndex = 2
@@ -95,7 +101,7 @@ Partial Class frmOptionen
         'btnAbbrechen
         '
         Me.btnAbbrechen.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnAbbrechen.Location = New System.Drawing.Point(161, 317)
+        Me.btnAbbrechen.Location = New System.Drawing.Point(161, 361)
         Me.btnAbbrechen.Name = "btnAbbrechen"
         Me.btnAbbrechen.Size = New System.Drawing.Size(140, 21)
         Me.btnAbbrechen.TabIndex = 3
@@ -220,7 +226,7 @@ Partial Class frmOptionen
         Me.dgDomain.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgDomain.RowTemplate.Height = 20
         Me.dgDomain.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.dgDomain.Size = New System.Drawing.Size(531, 165)
+        Me.dgDomain.Size = New System.Drawing.Size(531, 190)
         Me.dgDomain.TabIndex = 8
         Me.dgDomain.Visible = False
         '
@@ -275,7 +281,7 @@ Partial Class frmOptionen
         Me.grpOutlook.Controls.Add(Me.Label8)
         Me.grpOutlook.Controls.Add(Me.txtOrdnerZiel)
         Me.grpOutlook.Controls.Add(Me.txtOrdnerAusgang)
-        Me.grpOutlook.Location = New System.Drawing.Point(1, 163)
+        Me.grpOutlook.Location = New System.Drawing.Point(1, 203)
         Me.grpOutlook.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.grpOutlook.Name = "grpOutlook"
         Me.grpOutlook.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
@@ -479,7 +485,7 @@ Partial Class frmOptionen
         Me.dgOrdner.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgOrdner.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.cOrdnerName, Me.cOrdnerEID, Me.cOrdnerSID})
         Me.dgOrdner.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.dgOrdner.Location = New System.Drawing.Point(307, 168)
+        Me.dgOrdner.Location = New System.Drawing.Point(307, 192)
         Me.dgOrdner.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.dgOrdner.MultiSelect = False
         Me.dgOrdner.Name = "dgOrdner"
@@ -488,7 +494,7 @@ Partial Class frmOptionen
         Me.dgOrdner.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgOrdner.RowTemplate.Height = 20
         Me.dgOrdner.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.dgOrdner.Size = New System.Drawing.Size(530, 165)
+        Me.dgOrdner.Size = New System.Drawing.Size(530, 190)
         Me.dgOrdner.TabIndex = 11
         Me.dgOrdner.Visible = False
         '
@@ -516,7 +522,7 @@ Partial Class frmOptionen
         Me.btnDebug.FlatAppearance.BorderColor = System.Drawing.Color.White
         Me.btnDebug.FlatAppearance.BorderSize = 0
         Me.btnDebug.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDebug.Location = New System.Drawing.Point(143, 317)
+        Me.btnDebug.Location = New System.Drawing.Point(143, 361)
         Me.btnDebug.Name = "btnDebug"
         Me.btnDebug.Size = New System.Drawing.Size(15, 19)
         Me.btnDebug.TabIndex = 12
@@ -594,13 +600,56 @@ Partial Class frmOptionen
         Me.txtLDAP.Size = New System.Drawing.Size(230, 22)
         Me.txtLDAP.TabIndex = 0
         '
+        'grpAutoUpdate
+        '
+        Me.grpAutoUpdate.Controls.Add(Me.btnUpdatePfad)
+        Me.grpAutoUpdate.Controls.Add(Me.Label7)
+        Me.grpAutoUpdate.Controls.Add(Me.txtUpdatePfad)
+        Me.grpAutoUpdate.Location = New System.Drawing.Point(1, 166)
+        Me.grpAutoUpdate.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.grpAutoUpdate.Name = "grpAutoUpdate"
+        Me.grpAutoUpdate.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.grpAutoUpdate.Size = New System.Drawing.Size(300, 36)
+        Me.grpAutoUpdate.TabIndex = 18
+        Me.grpAutoUpdate.TabStop = False
+        Me.grpAutoUpdate.Text = "Auto Update"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(1, 14)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(30, 13)
+        Me.Label7.TabIndex = 4
+        Me.Label7.Text = "Pfad"
+        '
+        'txtUpdatePfad
+        '
+        Me.txtUpdatePfad.Location = New System.Drawing.Point(67, 11)
+        Me.txtUpdatePfad.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.txtUpdatePfad.Name = "txtUpdatePfad"
+        Me.txtUpdatePfad.ReadOnly = True
+        Me.txtUpdatePfad.Size = New System.Drawing.Size(202, 22)
+        Me.txtUpdatePfad.TabIndex = 0
+        '
+        'btnUpdatePfad
+        '
+        Me.btnUpdatePfad.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnUpdatePfad.Location = New System.Drawing.Point(270, 11)
+        Me.btnUpdatePfad.Name = "btnUpdatePfad"
+        Me.btnUpdatePfad.Size = New System.Drawing.Size(27, 21)
+        Me.btnUpdatePfad.TabIndex = 16
+        Me.btnUpdatePfad.Text = "..."
+        Me.btnUpdatePfad.UseVisualStyleBackColor = True
+        '
         'frmOptionen
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.ClientSize = New System.Drawing.Size(838, 341)
+        Me.ClientSize = New System.Drawing.Size(838, 385)
+        Me.Controls.Add(Me.grpAutoUpdate)
         Me.Controls.Add(Me.grpLDAP)
         Me.Controls.Add(Me.grpIgnore)
         Me.Controls.Add(Me.btnDebug)
@@ -628,6 +677,8 @@ Partial Class frmOptionen
         CType(Me.dgIgnoreList, System.ComponentModel.ISupportInitialize).EndInit()
         Me.grpLDAP.ResumeLayout(False)
         Me.grpLDAP.PerformLayout()
+        Me.grpAutoUpdate.ResumeLayout(False)
+        Me.grpAutoUpdate.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -680,5 +731,10 @@ Partial Class frmOptionen
     Friend WithEvents grpLDAP As System.Windows.Forms.GroupBox
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents txtLDAP As System.Windows.Forms.TextBox
+    Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents grpAutoUpdate As System.Windows.Forms.GroupBox
+    Friend WithEvents btnUpdatePfad As System.Windows.Forms.Button
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents txtUpdatePfad As System.Windows.Forms.TextBox
 
 End Class

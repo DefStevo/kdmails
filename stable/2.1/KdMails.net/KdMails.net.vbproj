@@ -7,11 +7,11 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>KdMails.net.My.MyApplication</StartupObject>
+    <StartupObject>Sub Main</StartupObject>
     <RootNamespace>KdMails.net</RootNamespace>
     <AssemblyName>KdMails.net</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OptionExplicit>On</OptionExplicit>
     <OptionCompare>Binary</OptionCompare>
@@ -91,6 +91,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.DirectoryServices">
       <Private>True</Private>
     </Reference>
@@ -141,6 +142,7 @@
     <Compile Include="frmOptionen.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="mdlHaupt.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

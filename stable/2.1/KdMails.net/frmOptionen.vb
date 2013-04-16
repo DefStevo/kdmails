@@ -35,6 +35,9 @@ Public Class frmOptionen
 
         btnDebug_Click(sender, e)
 
+        'Einstellung für Auto Update lesen
+        mdlHaupt.Lese_Registry("Update_Pfad", txtUpdatePfad.Text)
+
         'Einstellungen einlesen
         txtServer.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Server)
         txtDatenbank.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Datenbank)
@@ -197,7 +200,7 @@ Public Class frmOptionen
 
 #End Region
 
-#Region "Funtkionen"
+#Region "Funktionen"
     Private Sub btnOrdnerDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOrdnerDB.Click
         Cursor.Current = Cursors.WaitCursor
 
@@ -243,6 +246,12 @@ Public Class frmOptionen
         Cursor.Current = Cursors.WaitCursor
         frmHaupt.cOutlook.ResetAllMails(txtOrdnerZielEID.Text, txtOrdnerZielSID.Text)
         Cursor.Current = Cursors.Default
+    End Sub
+
+    Private Sub btnUpdate_Pfad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUpdatePfad.Click
+        mdlHaupt._FolderBrowser.ShowDialog()
+        txtUpdatePfad.Text = mdlHaupt._FolderBrowser.SelectedPath
+        mdlHaupt.Schreibe_Registry("Update_Pfad", txtUpdatePfad.Text)
     End Sub
 
 #End Region
