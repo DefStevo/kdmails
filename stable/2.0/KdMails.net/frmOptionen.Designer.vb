@@ -443,9 +443,9 @@ Partial Class frmOptionen
         Me.Label8.AutoSize = True
         Me.Label8.Location = New System.Drawing.Point(3, 41)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(74, 13)
+        Me.Label8.Size = New System.Drawing.Size(56, 13)
         Me.Label8.TabIndex = 4
-        Me.Label8.Text = "Postausgang"
+        Me.Label8.Text = "Gesendet"
         '
         'txtOrdnerZiel
         '
