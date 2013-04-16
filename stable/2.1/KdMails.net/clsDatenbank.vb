@@ -1,4 +1,7 @@
-﻿Imports System.Data.OleDb
+﻿#Region "Imports"
+Imports System.Data.OleDb
+
+#End Region
 
 Public Class clsDatenbank
 
@@ -17,7 +20,7 @@ Public Class clsDatenbank
     Public oReader As OleDbDataReader
 #End Region
 
-#Region "Eigenschaften"
+#Region "Properties"
     Property Server() As String
         Get
             Return _strServer
@@ -47,10 +50,10 @@ Public Class clsDatenbank
 
     Property Pass() As String
         Get
-            Return _strPAss
+            Return _strPass
         End Get
         Set(ByVal value As String)
-            _strPAss = value
+            _strPass = value
         End Set
     End Property
 
@@ -65,6 +68,7 @@ Public Class clsDatenbank
             Return _bConnStatus
         End Get
     End Property
+
 #End Region
 
 #Region "Funktionen"
@@ -92,7 +96,7 @@ Public Class clsDatenbank
     Function ConnectDB() As String
         'Connection Status prüfen ob Verbindung bereits besteht
         If _bConnStatus = True Then
-            Return False
+            DisconnectDB()
         End If
 
         'Prüfen ob alle Parameter vorhanden sind

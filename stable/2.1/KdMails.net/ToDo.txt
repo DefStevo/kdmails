@@ -1,5 +1,5 @@
 ﻿--Version 2.1.0
-	. Ermitteln der E-Mail Adresse bei Adresstype = "EX" aus Active Directory per LDAP
+	. Ermitteln der E-Mail Adresse bei Adresstype = "EX" aus Active Directory per LDAP => Testphase
 
 --Version 2.0.5
 	. Checkbox Kopieren/Verschieben aktivieren (E-Mails sollen nicht verschoben werden) => DONE

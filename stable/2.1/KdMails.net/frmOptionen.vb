@@ -4,6 +4,7 @@ Imports System.Data.OleDb
 #End Region
 
 Public Class frmOptionen
+
 #Region "Deklarationen"
 
     Private _strTemp As String = ""
@@ -40,6 +41,8 @@ Public Class frmOptionen
         txtBenutzer.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Benutzer)
         txtKennwort.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Kennwort)
 
+        txtLDAP.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.LDAP_Domain)
+
         txtOrdnerEingang.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 1)
         txtOrdnerEingangEID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 2)
         txtOrdnerEingangSID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 3)
@@ -64,7 +67,7 @@ Public Class frmOptionen
 
         FillDGFolder()
         FillDGDomain()
-        FillDgIgnoreList()
+        FillDGIgnoreList()
 
         dgIgnoreList.AllowUserToAddRows = True
     End Sub
@@ -129,6 +132,7 @@ Public Class frmOptionen
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Datenbank, txtDatenbank.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Benutzer, txtBenutzer.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Kennwort, txtKennwort.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LDAP_Domain, txtLDAP.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Eingang, txtOrdnerEingang.Text, txtOrdnerEingangEID.Text, txtOrdnerEingangSID.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Gesendet, txtOrdnerAusgang.Text, txtOrdnerAusgangEID.Text, txtOrdnerAusgangSID.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Ziel, txtOrdnerZiel.Text, txtOrdnerZielEID.Text, txtOrdnerZielSID.Text)
