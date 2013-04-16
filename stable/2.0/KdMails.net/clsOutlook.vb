@@ -91,7 +91,6 @@ Public Class clsOutlook
         'Funktion GetFolders muss zuvor aufgerufen werden
         If _bInitStatus = False Or _MSFolders Is Nothing Then
             Return Nothing
-            Exit Function
         End If
 
         Return _MSFolders.GetNext
@@ -101,47 +100,76 @@ Public Class clsOutlook
 #Region "Mail-Funktionen"
     Function GetMails(ByVal OrdnerEID As String, ByVal OrdnerSID As String) As Outlook.MailItem
         'Outlook Initialisieren wenn noch nicht erfolgt
-        If _bInitStatus = False Then
-            InitOutlook()
-        End If
+        Try
+            If _bInitStatus = False Then
+                InitOutlook()
+            End If
 
-        _MSFold = _MSNameSpace.GetFolderFromID(OrdnerEID, OrdnerSID)
+            _MSFold = _MSNameSpace.GetFolderFromID(OrdnerEID, OrdnerSID)
 
-        If _MSFold.Items.Count > 0 Then
-            _iMailID = 1
-        End If
+            If _MSFold.Items.Count = 0 Then
+                Return Nothing
+            Else
 
-        _MSMailItem = _MSFold.Items(_iMailID)
+                _iMailID = 1
+            End If
+
+
+            _MSMailItem = _MSFold.Items(_iMailID)
 
         If Not _MSMailItem.UserProperties.Find("KDMailsNet") Is Nothing Then
             _MSMailItem = GetNextMail()
         End If
 
             Return _MSMailItem
+
+        Catch ex As System.InvalidCastException
+            'Terminbestätigung empfangen oder gesendet
+            _MSMailItem = GetNextMail()
+
+        Catch ex As Exception
+            MsgBox("Fehler: " & ex.ToString, MsgBoxStyle.Critical, "Fehler beim ermitteln der E-Mails")
+            _MSMailItem = GetNextMail()
+
+        End Try
+        Return _MSMailItem
     End Function
 
     Function GetNextMail() As Outlook.MailItem
-        'Funktion GetMails muss zuvor aufgerufen werden
-        If _bInitStatus = False Or _MSFold Is Nothing Then
-            Return Nothing
-            Exit Function
-        End If
+        Try
+            'Funktion GetMails muss zuvor aufgerufen werden
+            If _bInitStatus = False Or _MSFold Is Nothing Then
+                Return Nothing
+            End If
 
-        _iMailID += 1
+            _iMailID += 1
 
-        If _MSFold.Items.Count >= _iMailID Then
-            _MSMailItem = _MSFold.Items(_iMailID)
-        Else
-            _MSMailItem = Nothing
+            If _MSFold.Items.Count >= _iMailID Then
+
+                _MSMailItem = _MSFold.Items(_iMailID)
+
+            Else
+                _MSMailItem = Nothing
+                Return _MSMailItem
+            End If
+
+            If Not _MSMailItem.UserProperties.Find("KDMailsNet") Is Nothing Then
+                _MSMailItem = GetNextMail()
+            End If
+
             Return _MSMailItem
-        End If
 
-        If Not _MSMailItem.UserProperties.Find("KDMailsNet") Is Nothing Then
+        Catch ex As System.InvalidCastException
+            'Terminbestätigung empfangen oder gesendet
             _MSMailItem = GetNextMail()
-        End If
+
+        Catch ex As Exception
+            MsgBox("Fehler: " & ex.ToString, MsgBoxStyle.Critical, "Fehler beim ermitteln der nächsten E-Mail")
+            _MSMailItem = GetNextMail()
+
+        End Try
 
         Return _MSMailItem
-
     End Function
 
     Function CopyMail(ByVal MailEID As String, ByVal OrdnerEID As String, ByVal OrdnerSID As String, ByVal Copy As Integer) As Boolean

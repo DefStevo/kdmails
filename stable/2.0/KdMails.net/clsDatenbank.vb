@@ -72,7 +72,6 @@ Public Class clsDatenbank
         'Prüfen ob die Verbindung bereits besteht
         If _bConnStatus = True Then
             Return False
-            Exit Function
         End If
         _strServer = Server
         _strDB = Datenbank
@@ -94,13 +93,11 @@ Public Class clsDatenbank
         'Connection Status prüfen ob Verbindung bereits besteht
         If _bConnStatus = True Then
             Return False
-            Exit Function
         End If
 
         'Prüfen ob alle Parameter vorhanden sind
         If _strServer = "" Or _strDB = "" Or _strUser = "" Or _strPass = "" Then
             Return False
-            Exit Function
         End If
 
         _oraConn = New OleDbConnection("Provider=MSDAORA.1" & _
@@ -119,12 +116,11 @@ Public Class clsDatenbank
                     MsgBox("Fehler: " & ex.ToString & vbCrLf & vbCrLf & _
                    "Server: " & _strServer & vbCrLf & _
                    "Datebank: " & _strDB & vbCrLf & _
-                   "Benutzer: " & _strUser, MsgBoxStyle.Critical, "Fehler bei Verbindung zur Datenbank")
+                   "Benutzer: " & _strUser, MsgBoxStyle.Critical, "Fehler bei der Verbindung zur Datenbank")
             End Select
 
             _bConnStatus = False
             Return "Keine Verbindung zur Datenbank " & _strDB & "@" & _strServer
-            Exit Function
         End Try
 
         _bConnStatus = True

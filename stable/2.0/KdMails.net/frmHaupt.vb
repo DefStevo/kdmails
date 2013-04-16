@@ -13,6 +13,12 @@ Public Class frmHaupt
 
 #Region "Subs"
     Private Sub frmHaupt_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Me.Text = Me.Text & _
+                  " (v. " & _
+                  My.Application.Info.Version.Major.ToString & "." & _
+                  My.Application.Info.Version.Minor.ToString & "." & _
+                  My.Application.Info.Version.Build.ToString & ")"
+
         Timer1.Interval = 1
         Timer1.Enabled = True
     End Sub
@@ -27,7 +33,7 @@ Public Class frmHaupt
         Me.Refresh()
 
         My.Settings.Upgrade()
-        cConfig.InitConfig(True, True, True)
+        cConfig.InitConfig(True, True, True, True)
 
         stStatus.Text = "Outlook wird Initialisiert"
         Me.Refresh()
@@ -35,7 +41,11 @@ Public Class frmHaupt
 
         stStatus.Text = "Verbindung zur Datenbank wird hergestellt"
         Me.Refresh()
-        cDatenbank.SetConnectionInfo(My.Settings.strServer, My.Settings.strDatenbank, My.Settings.strBenutzer, My.Settings.strKennwort)
+        cDatenbank.SetConnectionInfo(cConfig.GetSettings("DB.Server"), _
+                                     cConfig.GetSettings("DB.Datenbank"), _
+                                     cConfig.GetSettings("DB.Benutzer"), _
+                                     cConfig.GetSettings("DB.Kennwort"))
+
         stStatus.Text = cDatenbank.ConnectDB()
         btnLos.Enabled = True
         btnOptionen.Enabled = True
