@@ -20,6 +20,8 @@ Public Class frmHaupt
                   My.Application.Info.Version.Minor.ToString & "." & _
                   My.Application.Info.Version.Build.ToString & ")"
 
+
+
         Timer1.Interval = 1
         Timer1.Enabled = True
     End Sub

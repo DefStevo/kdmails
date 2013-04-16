@@ -66,7 +66,7 @@ Public Class clsOutlook
         _MSFold = _MSNameSpace.PickFolder
 
         If Not _MSFold Is Nothing Then
-            OrdnerPfad = _MSFold.FolderPath
+            OrdnerPfad = _MSFold.Name
             OrdnerEID = _MSFold.EntryID
             OrdnerSID = _MSFold.StoreID
         End If

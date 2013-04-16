@@ -163,12 +163,14 @@ Public Class frmMails
 
                     _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i) = _GetMailInfo(_MailInfos.SenderEMailAdress)
 
-                    If Not _GetMailInfo(_MailInfos.SenderEMailAdress).IndexOf("@") = -1 Then
-                        sDomain = _GetMailInfo(_MailInfos.SenderEMailAdress).Split("@")(1).ToString
+                    If Not _GetMailInfo(_MailInfos.SenderEMailAdress) = Nothing Then
+                        If Not _GetMailInfo(_MailInfos.SenderEMailAdress).IndexOf("@") = -1 Then
+                            sDomain = _GetMailInfo(_MailInfos.SenderEMailAdress).Split("@")(1).ToString
 
-                    Else
-                        sDomain = _GetMailInfo(_MailInfos.SenderEMailAdress)
+                        Else
+                            sDomain = _GetMailInfo(_MailInfos.SenderEMailAdress)
 
+                        End If
                     End If
 
                 ElseIf x = 1 Then
