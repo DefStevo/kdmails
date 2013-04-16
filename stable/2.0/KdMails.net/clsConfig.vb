@@ -39,18 +39,39 @@
             strDomäne = Domäne
         End Sub
     End Structure
+
+    Structure sSettings
+        Dim strName As String
+
+        Dim strValue1 As String
+        Dim strValue2 As String
+        Dim strValue3 As String
+
+        Sub New(ByVal Name As String, ByVal Value1 As String, ByVal Value2 As String, ByVal Value3 As String)
+            strName = Name
+            strValue1 = Value1
+            strValue2 = Value2
+            strValue3 = Value3
+        End Sub
+    End Structure
 #End Region
 
 #Region "Deklarationen"
     Private _strDateiOrdner As String = My.Application.Info.DirectoryPath & "\Config\KdMails.Ordner.cfg"
     Private _strDateiDomäne As String = My.Application.Info.DirectoryPath & "\Config\KdMails.Domänen.cfg"
     Private _strDateiIgnore As String = My.Application.Info.DirectoryPath & "\Config\KdMails.Ignore.cfg"
+
+    Private _strDateiSettings As String = My.Application.Info.DirectoryPath & "\Config\KdMails.Settings.cfg"
+
     Private _srOrdner As System.IO.StreamReader
     Private _swOrdner As System.IO.StreamWriter
     Private _srDomäne As System.IO.StreamReader
     Private _swDomäne As System.IO.StreamWriter
     Private _srIgnore As System.IO.StreamReader
     Private _swIgnore As System.IO.StreamWriter
+
+    Private _srSettings As System.IO.StreamReader
+    Private _swSettings As System.IO.StreamWriter
 
     Private _bInitStatus As Boolean
 
@@ -61,10 +82,14 @@
     Public oIgnoreL As List(Of sIgnore)
     Private oIgnoreZ As sIgnore
 
+    Public oSettingsL As List(Of sSettings)
+    Private oSettingsZ As sSettings
+
+
 #End Region
 
 #Region "Funktionen"
-    Function InitConfig(ByVal Ordner As Boolean, ByVal Domänen As Boolean, ByVal IgnoreList As Boolean) As Boolean
+    Function InitConfig(ByVal Ordner As Boolean, ByVal Domänen As Boolean, ByVal IgnoreList As Boolean, ByVal Settings As Boolean) As Boolean
         If Ordner = True Then
             oOrdnerL = New List(Of sOrdner)
             If ReadConfigFolder() = False Then
@@ -92,6 +117,14 @@
 
         End If
 
+        If Settings = True Then
+            oSettingsL = New List(Of sSettings)
+            If ReadConfigSettings() = False Then
+                MsgBox("Datei kann nicht gelesen werden" & vbCrLf & _
+                       _strDateiSettings, MsgBoxStyle.Critical, "Fehler beim Lesen der Konfiguration")
+            End If
+        End If
+
         _bInitStatus = True
 
         Return True
@@ -102,18 +135,23 @@
             _strDateiOrdner = Nothing
             _strDateiDomäne = Nothing
             _strDateiIgnore = Nothing
+            _strDateiSettings = Nothing
             _srDomäne = Nothing
             _srOrdner = Nothing
             _swDomäne = Nothing
             _swOrdner = Nothing
             _srIgnore = Nothing
             _swIgnore = Nothing
+            _srSettings = Nothing
+            _swSettings = Nothing
             oOrdnerL = Nothing
             oOrdnerZ = Nothing
             oDomänenL = Nothing
             oDomänenZ = Nothing
             oIgnoreL = Nothing
             oIgnoreZ = Nothing
+            oSettingsL = Nothing
+            oSettingsZ = Nothing
             _bInitStatus = False
             Return True
         End If
@@ -177,6 +215,59 @@
             End While
 
             _srIgnore.Close()
+
+            Return True
+
+        Else
+            Return False
+        End If
+    End Function
+
+    Private Function ReadConfigSettings() As Boolean
+        Dim strBuffer As String
+
+        Dim strName As String = ""
+        Dim strValue1 As String = ""
+        Dim strValue2 As String = ""
+        Dim strValue3 As String = ""
+
+        If System.IO.File.Exists(_strDateiSettings) Then
+            _srSettings = New System.IO.StreamReader(_strDateiSettings)
+
+            strBuffer = _srSettings.ReadLine
+
+            While Not strBuffer Is Nothing
+                strName = ""
+                strValue1 = ""
+                strValue2 = ""
+                strValue3 = ""
+
+                If strBuffer.Split("=").Length = 2 Then
+                    strName = strBuffer.Split("=")(0)
+
+                    Select Case strBuffer.Split("=")(1).Split(";").Length
+                        Case 1
+                            strValue1 = strBuffer.Split("=")(1).Split(";")(0)
+                        Case 2
+                            strValue1 = strBuffer.Split("=")(1).Split(";")(0)
+                            strValue2 = strBuffer.Split("=")(1).Split(";")(1)
+                        Case 3
+                            strValue1 = strBuffer.Split("=")(1).Split(";")(0)
+                            strValue2 = strBuffer.Split("=")(1).Split(";")(1)
+                            strValue3 = strBuffer.Split("=")(1).Split(";")(2)
+                    End Select
+
+                    AddSettings(strName, strValue1, strValue2, strValue3)
+                Else
+                    'Die Einstellung beinhalte kein =
+                    MsgBox("Der Wert '" & strBuffer & "' konnte nicht umgewandelt werden" & vbCrLf & "Die Einstellung beinhaltet kein '='", MsgBoxStyle.Critical, "Fehler beim Lesen der Einstellungen")
+
+                End If
+
+                strBuffer = _srSettings.ReadLine
+            End While
+
+            _srSettings.Close()
 
             Return True
 
@@ -256,6 +347,33 @@
 
         Return True
     End Function
+
+    Function WriteConfigSettings() As Boolean
+        Dim strBuffer As String = ""
+
+        If Not System.IO.File.Exists(_strDateiSettings) Then
+            System.IO.File.Create(_strDateiSettings)
+        End If
+
+        _swSettings = New System.IO.StreamWriter(_strDateiSettings, False)
+
+        For i As Integer = 0 To oSettingsL.Count - 1
+            With oSettingsL(i)
+                strBuffer = strBuffer & _
+                            .strName & "=" & _
+                            .strValue1 & ";" & _
+                            .strValue2 & ";" & _
+                            .strValue3 & vbCrLf
+            End With
+        Next
+
+        _swSettings.Write(strBuffer)
+        _swSettings.Flush()
+        _swSettings.Close()
+
+        Return True
+
+    End Function
 #End Region
 
 #Region "Ordner Funktionen"
@@ -263,7 +381,6 @@
         'Prüfen ob der Ordner bereits in der Liste vorhanden ist
         If SearchFolder(Name, EID, SID) > -1 Then
             Return False
-            Exit Function
         End If
 
         'Objekt in Liste aufnehmen
@@ -337,7 +454,6 @@
 
                 If bMatchName = True And bMatchEID = True And bMatchSID = True Then
                     Return i
-                    Exit Function
                 End If
             Next
 
@@ -352,7 +468,6 @@
         'Prüfen ob die Domäne bereits in der Liste vorhanden ist
         If SearchDomain(Domäne, Kunde, Ordner, EID, SID) > -1 Then
             Return False
-            Exit Function
         End If
 
         'Objekt in Liste aufnehmen
@@ -473,7 +588,6 @@
 
                 If bMatchDomäne = True And bMatchKunde = True And bMatchOrdner = True And bMatchEID = True And bMatchSID = True Then
                     Return i
-                    Exit Function
                 End If
             Next
 
@@ -488,36 +602,33 @@
 
         If Domäne Is Nothing Then
             Return False
-            Exit Function
         End If
 
         If SearchIgnoreList(Domäne) > -1 Then
             Return False
-            Exit Function
         End If
 
         'Objeckt in Liste aufnehmen
         oIgnoreZ = New sIgnore(Domäne)
         oIgnoreL.Add(oIgnoreZ)
         Return True
+
     End Function
 
     Function SearchIgnoreList(ByVal Domäne As String) As Integer
-        Dim bMatchDomäne As Boolean
+        Dim bMatchDomäne As Boolean = False
 
         If Not Domäne Is Nothing Then
             For i As Integer = 0 To oIgnoreL.Count - 1
-                bMatchDomäne = True
 
                 If Not Domäne Is Nothing Then
-                    If Not oIgnoreL(i).strDomäne = Domäne Then
-                        bMatchDomäne = False
+                    If oIgnoreL(i).strDomäne = Domäne Then
+                        bMatchDomäne = True
                     End If
                 End If
 
                 If bMatchDomäne = True Then
                     Return i
-                    Exit Function
                 End If
             Next
 
@@ -539,6 +650,91 @@
         oIgnoreL.RemoveRange(Index, 1)
         Return True
     End Function
+
+#End Region
+
+#Region "Settings Funktionen"
+    Function SearchSettings(ByVal Name As String) As Integer
+        Dim bMatchSetting As Boolean = False
+
+        For i As Integer = 0 To oSettingsL.Count - 1
+            If Name = oSettingsL(i).strName Then
+                bMatchSetting = True
+            End If
+
+            If bMatchSetting = True Then
+                Return i
+            End If
+        Next
+
+        Return -1
+    End Function
+
+    Function AddSettings(ByVal Name As String, ByVal Value1 As String, ByVal Value2 As String, ByVal Value3 As String)
+
+        If Name Is Nothing Then
+            Return False
+        End If
+
+        If Not GetSettings(Name) = Nothing Then
+            Return False
+        End If
+
+        'Objekt in Liste aufnehmen
+        oSettingsZ = New sSettings(Name, Value1, Value2, Value3)
+        oSettingsL.Add(oSettingsZ)
+        Return True
+
+    End Function
+
+    Function GetSettings(ByVal Name As String, Optional ByVal Value As Integer = 1) As String
+
+        If Not Name Is Nothing Then
+            For i As Integer = 0 To oSettingsL.Count - 1
+                If Name = oSettingsL(i).strName Then
+                    With oSettingsL(i)
+                        Select Case Value
+                            Case 3
+                                Return .strValue3
+                            Case 2
+                                Return .strValue2
+                            Case Else
+                                Return .strValue1
+                        End Select
+                    End With
+                End If
+            Next
+        End If
+
+        Return Nothing
+
+    End Function
+
+    Function SetSettings(ByVal Name As String, Optional ByVal Value1 As String = Nothing, Optional ByVal Value2 As String = Nothing, Optional ByVal Value3 As String = Nothing)
+        Dim i As Integer
+
+        i = SearchSettings(Name)
+
+        If Not i = -1 Then
+            oSettingsZ.strName = oSettingsL(i).strName
+            oSettingsZ.strValue1 = oSettingsL(i).strValue1
+            oSettingsZ.strValue2 = oSettingsL(i).strValue2
+            oSettingsZ.strValue3 = oSettingsL(i).strValue3
+
+            With oSettingsZ
+                .strValue1 = Value1
+                .strValue2 = Value2
+                .strValue3 = Value3
+            End With
+
+            oSettingsL(i) = oSettingsZ
+        Else
+            AddSettings(Name, Value1, Value2, Value3)
+        End If
+
+        Return True
+    End Function
+
 
 #End Region
 

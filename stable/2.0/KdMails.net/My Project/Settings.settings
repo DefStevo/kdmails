@@ -1,30 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" UseMySettingsClassName="true">
   <Profiles />
-  <Settings>
-    <Setting Name="strServer" Type="System.String" Scope="User">
-      <Value Profile="(Default)">PROG</Value>
-    </Setting>
-    <Setting Name="strDatenbank" Type="System.String" Scope="User">
-      <Value Profile="(Default)">PROJEKT</Value>
-    </Setting>
-    <Setting Name="strBenutzer" Type="System.String" Scope="User">
-      <Value Profile="(Default)">projekt</Value>
-    </Setting>
-    <Setting Name="strKennwort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sysadm</Value>
-    </Setting>
-    <Setting Name="nOptionKopierenVerschieben" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="strOrdnerEingang" Type="System.String" Scope="User">
-      <Value Profile="(Default)">&lt;-- Bitte Ordner Auswählen;00;00</Value>
-    </Setting>
-    <Setting Name="strOrdnerAusgang" Type="System.String" Scope="User">
-      <Value Profile="(Default)">&lt;-- Bitte Ordner Auswählen;00;00</Value>
-    </Setting>
-    <Setting Name="strOrdnerZiel" Type="System.String" Scope="User">
-      <Value Profile="(Default)">&lt;-- Bitte Ordner Auswählen;00;00</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>

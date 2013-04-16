@@ -35,26 +35,26 @@ Public Class frmOptionen
         btnDebug_Click(sender, e)
 
         'Einstellungen einlesen
-        txtServer.Text = My.Settings.strServer
-        txtDatenbank.Text = My.Settings.strDatenbank
-        txtBenutzer.Text = My.Settings.strBenutzer
-        txtKennwort.Text = My.Settings.strKennwort
+        txtServer.Text = frmHaupt.cConfig.GetSettings("DB.Server")
+        txtDatenbank.Text = frmHaupt.cConfig.GetSettings("DB.Datenbank")
+        txtBenutzer.Text = frmHaupt.cConfig.GetSettings("DB.Benutzer")
+        txtKennwort.Text = frmHaupt.cConfig.GetSettings("DB.Kennwort")
 
-        txtOrdnerEingang.Text = My.Settings.strOrdnerEingang.Split(";")(0).ToString
-        txtOrdnerEingangEID.Text = My.Settings.strOrdnerEingang.Split(";")(1).ToString
-        txtOrdnerEingangSID.Text = My.Settings.strOrdnerEingang.Split(";")(2).ToString
+        txtOrdnerEingang.Text = frmHaupt.cConfig.GetSettings("Ordner.Eingang", 1)
+        txtOrdnerEingangEID.Text = frmHaupt.cConfig.GetSettings("Ordner.Eingang", 2)
+        txtOrdnerEingangSID.Text = frmHaupt.cConfig.GetSettings("Ordner.Eingang", 3)
 
-        txtOrdnerAusgang.Text = My.Settings.strOrdnerAusgang.Split(";")(0).ToString
-        txtOrdnerAusgangEID.Text = My.Settings.strOrdnerAusgang.Split(";")(1).ToString
-        txtOrdnerAusgangSID.Text = My.Settings.strOrdnerAusgang.Split(";")(2).ToString
+        txtOrdnerAusgang.Text = frmHaupt.cConfig.GetSettings("Ordner.Gesendet", 1)
+        txtOrdnerAusgangEID.Text = frmHaupt.cConfig.GetSettings("Ordner.Gesendet", 2)
+        txtOrdnerAusgangSID.Text = frmHaupt.cConfig.GetSettings("Ordner.Gesendet", 3)
 
-        txtOrdnerZiel.Text = My.Settings.strOrdnerZiel.Split(";")(0).ToString
-        txtOrdnerZielEID.Text = My.Settings.strOrdnerZiel.Split(";")(1).ToString
-        txtOrdnerZielSID.Text = My.Settings.strOrdnerZiel.Split(";")(2).ToString
+        txtOrdnerZiel.Text = frmHaupt.cConfig.GetSettings("Ordner.Ziel", 1)
+        txtOrdnerZielEID.Text = frmHaupt.cConfig.GetSettings("Ordner.Ziel", 2)
+        txtOrdnerZielSID.Text = frmHaupt.cConfig.GetSettings("Ordner.Ziel", 3)
 
-        If My.Settings.nOptionKopierenVerschieben = 0 Then
+        If frmHaupt.cConfig.GetSettings("Mail.KopierenVerschieben") = 0 Then
             optKopieren.Checked = True
-        ElseIf My.Settings.nOptionKopierenVerschieben = 1 Then
+        ElseIf frmHaupt.cConfig.GetSettings("Mail.KopierenVerschieben") = 1 Then
             optVerschieben.Checked = True
         End If
 
@@ -125,25 +125,25 @@ Public Class frmOptionen
 #Region "Standard"
     Private Sub btnSpeichern_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSpeichern.Click
         'Einstellungen Speichern
-        My.Settings.strServer = txtServer.Text
-        My.Settings.strDatenbank = txtDatenbank.Text
-        My.Settings.strBenutzer = txtBenutzer.Text
-        My.Settings.strKennwort = txtKennwort.Text
-        My.Settings.strOrdnerEingang = txtOrdnerEingang.Text & ";" & txtOrdnerEingangEID.Text & ";" & txtOrdnerEingangSID.Text
-        My.Settings.strOrdnerAusgang = txtOrdnerAusgang.Text & ";" & txtOrdnerAusgangEID.Text & ";" & txtOrdnerAusgangSID.Text
-        My.Settings.strOrdnerZiel = txtOrdnerZiel.Text & ";" & txtOrdnerZielEID.Text & ";" & txtOrdnerZielSID.Text
+        frmHaupt.cConfig.SetSettings("DB.Server", txtServer.Text)
+        frmHaupt.cConfig.SetSettings("DB.Datenbank", txtDatenbank.Text)
+        frmHaupt.cConfig.SetSettings("DB.Benutzer", txtBenutzer.Text)
+        frmHaupt.cConfig.SetSettings("DB.Kennwort", txtKennwort.Text)
+        frmHaupt.cConfig.SetSettings("Ordner.Eingang", txtOrdnerEingang.Text, txtOrdnerEingangEID.Text, txtOrdnerEingangSID.Text)
+        frmHaupt.cConfig.SetSettings("Ordner.Gesendet", txtOrdnerAusgang.Text, txtOrdnerAusgangEID.Text, txtOrdnerAusgangSID.Text)
+        frmHaupt.cConfig.SetSettings("Ordner.Ziel", txtOrdnerZiel.Text, txtOrdnerZielEID.Text, txtOrdnerZielSID.Text)
         If optKopieren.Checked = True Then
-            My.Settings.nOptionKopierenVerschieben = 0
+            frmHaupt.cConfig.SetSettings("Mail.KopierenVerschieben", 0)
         ElseIf optVerschieben.Checked = True Then
-            My.Settings.nOptionKopierenVerschieben = 1
+            frmHaupt.cConfig.SetSettings("Mail.KopierenVerschieben", 1)
         End If
-        My.Settings.Save()
 
         AddDGToIgnoreList()
 
         frmHaupt.cConfig.WriteConfigDomain()
         frmHaupt.cConfig.WriteConfigFolder()
         frmHaupt.cConfig.WriteConfigIgnore()
+        frmHaupt.cConfig.WriteConfigSettings()
     End Sub
 
     Private Sub btnAbbrechen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbbrechen.Click
