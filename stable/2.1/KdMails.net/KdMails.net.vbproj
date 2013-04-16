@@ -20,7 +20,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ApplicationIcon>Resources\Icons\Mail.ico</ApplicationIcon>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
-    <ManifestCertificateThumbprint>493E710EFCF3D8CBED53B5D2DFDD1113E266623D</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>FCB318D4E4A1BBF36D4AF835B981AE095215FAEC</ManifestCertificateThumbprint>
     <ManifestKeyFile>KdMails.net_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>false</GenerateManifests>
     <SignManifests>true</SignManifests>
@@ -92,6 +92,11 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Outlook, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>Resources\Microsoft.Office.Interop.Outlook.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -121,37 +126,37 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clsConfig.vb">
+    <Compile Include="Classes_Modules\clsConfig.vb">
     </Compile>
-    <Compile Include="clsDatenbank.vb" />
-    <Compile Include="clsLDAP.vb" />
-    <Compile Include="clsOutlook.vb" />
-    <Compile Include="frmHaupt.vb">
+    <Compile Include="Classes_Modules\clsDatenbank.vb" />
+    <Compile Include="Classes_Modules\clsLDAP.vb" />
+    <Compile Include="Classes_Modules\clsOutlook.vb" />
+    <Compile Include="Forms\frmHaupt.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmHaupt.Designer.vb">
+    <Compile Include="Forms\frmHaupt.Designer.vb">
       <DependentUpon>frmHaupt.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmHistorie.Designer.vb">
+    <Compile Include="Forms\frmHistorie.Designer.vb">
       <DependentUpon>frmHistorie.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmHistorie.vb">
+    <Compile Include="Forms\frmHistorie.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMails.Designer.vb">
+    <Compile Include="Forms\frmMails.Designer.vb">
       <DependentUpon>frmMails.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmMails.vb">
+    <Compile Include="Forms\frmMails.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmOptionen.Designer.vb">
+    <Compile Include="Forms\frmOptionen.Designer.vb">
       <DependentUpon>frmOptionen.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmOptionen.vb">
+    <Compile Include="Forms\frmOptionen.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="mdlHaupt.vb" />
+    <Compile Include="Classes_Modules\mdlHaupt.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -167,21 +172,20 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Settings.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmHaupt.resx">
+    <EmbeddedResource Include="Forms\frmHaupt.resx">
       <DependentUpon>frmHaupt.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmHistorie.resx">
+    <EmbeddedResource Include="Forms\frmHistorie.resx">
       <DependentUpon>frmHistorie.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmMails.resx">
+    <EmbeddedResource Include="Forms\frmMails.resx">
       <DependentUpon>frmMails.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmOptionen.resx">
+    <EmbeddedResource Include="Forms\frmOptionen.resx">
       <DependentUpon>frmOptionen.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -196,6 +200,8 @@
     <Content Include="Config\KdMails.Ignore.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Config\KdMails.Ungelesen.cfg" />
+    <None Include="KdMails.net_TemporaryKey.pfx" />
     <None Include="Update.log">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -275,18 +281,6 @@
     </Content>
     <None Include="My Project\app.manifest" />
     <None Include="Resources\Images\Hint.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Microsoft.Office.Interop.Outlook">
-      <Guid>{00062FFF-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>9</VersionMajor>
-      <VersionMinor>3</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <Private>True</Private>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <PublishFile Include="KdMails.net.pdb">
