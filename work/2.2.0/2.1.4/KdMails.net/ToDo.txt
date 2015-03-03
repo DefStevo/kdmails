@@ -1,0 +1,6 @@
+﻿--Version X
+	. Checkbox für Ignore einbauen und Liste nochmals durchgehen
+	. Beim Zuordnen in der Liste alle nicht zugeordneten Mails nochmals durchgehen
+	. Protokollierung von kopierten/verschobenen Mails (1 Datei pro Lauf)
+	. Ansicht der Protokollierung in Tabellenform (E/A, Adresse, Betreff, Datum, Zielordner (ohne ID's), kopiert/verschoben, Datum/Uhrzeit)
+	. Batchfunktion
