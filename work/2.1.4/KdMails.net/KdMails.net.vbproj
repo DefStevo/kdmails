@@ -23,7 +23,7 @@
     <ManifestCertificateThumbprint>64214CC57AB675E5263ACD73CA4DEDD004E62A3A</ManifestCertificateThumbprint>
     <ManifestKeyFile>KdMails.net_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>false</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>

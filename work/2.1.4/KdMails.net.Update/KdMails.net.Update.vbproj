@@ -94,10 +94,10 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmUpdate.vb">
+    <Compile Include="Forms\frmUpdate.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmUpdate.Designer.vb">
+    <Compile Include="Forms\frmUpdate.Designer.vb">
       <DependentUpon>frmUpdate.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
@@ -118,7 +118,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmUpdate.resx">
+    <EmbeddedResource Include="Forms\frmUpdate.resx">
       <DependentUpon>frmUpdate.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
