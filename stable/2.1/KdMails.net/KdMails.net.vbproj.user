@@ -12,7 +12,7 @@
     </BootstrapperUrlHistory>
     <FallbackCulture>de-DE</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
     <ReferencePath>M:\DEV\VB2008\Projekte\KdMails.net\KdMails.net\bin\</ReferencePath>
     <ErrorReportUrlHistory />
   </PropertyGroup>

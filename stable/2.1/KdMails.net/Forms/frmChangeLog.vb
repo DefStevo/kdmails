@@ -1,4 +1,4 @@
-﻿Public Class frmHistorie
+﻿Public Class frmChangeLog
 
 #Region "Strukturen"
     Structure sAenderung
