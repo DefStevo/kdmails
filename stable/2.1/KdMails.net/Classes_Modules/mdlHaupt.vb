@@ -36,7 +36,7 @@ Module mdlHaupt
                         End If
 
                         If System.IO.File.Exists(_strApp_Pfad + "\Update.log") Then
-                            frmHistorie.ShowDialog()
+                            frmChangeLog.ShowDialog()
                         End If
 
                 End Select

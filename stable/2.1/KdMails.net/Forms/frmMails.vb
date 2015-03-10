@@ -33,8 +33,10 @@ Public Class frmMails
         cOrdner = 3
         cOrdnerEID = 4
         cOrdnerSID = 5
-        cKopieren = 6
-        cMailAdr = 7
+        cCopy = 6
+        cIgnore = 7
+        cMailAdr = 8
+
     End Enum
 
     Private Enum _UnreadMailInfos As Integer
@@ -47,10 +49,11 @@ Public Class frmMails
 #Region "Properties"
     Private Property _dgItem(ByVal Item As String, ByVal Index As Integer) As String
         Get
-            Return dgMails.Item(Item, Index).Value
+            Return dgMails.Rows(Index).Cells(Item).Value
         End Get
         Set(ByVal value As String)
-            dgMails.Item(Item, Index).Value = value
+            dgMails.Rows(Index).Cells(Item).Value = value
+
         End Set
     End Property
 
@@ -89,6 +92,8 @@ Public Class frmMails
             Case 6
                 Return "cCopy"
             Case 7
+                Return "cIgnore"
+            Case 8
                 Return "cMailAdress"
             Case Else
                 Return ""
@@ -116,7 +121,12 @@ Public Class frmMails
                         Return .EntryID
 
                     Case 5
-                        Return .UnRead
+                        Try
+                            Return .UnRead
+                        Catch ex As Exception
+                            Return False
+                        End Try
+
 
                 End Select
             End With
@@ -146,7 +156,33 @@ Public Class frmMails
         End Get
     End Property
 
+    Private Property _dgSetCheckBoxReadOnly(ByVal Item As String, ByVal Index As Integer) As Boolean
+        Get
+            Return dgMails.Rows(Index).Cells(Item).ReadOnly
+        End Get
+        Set(value As Boolean)
+            Dim StyleDisabled As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+            Dim StyleEnabled As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
 
+            StyleEnabled.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+            StyleEnabled.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+            StyleEnabled.NullValue = False
+            StyleDisabled.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+            StyleDisabled.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+            StyleDisabled.NullValue = False
+            StyleDisabled.BackColor = Color.Gray
+
+            If value = True Then
+                dgMails.Rows(Index).Cells(Item).ReadOnly = value
+                dgMails.Rows(Index).Cells(Item).Style = StyleDisabled
+
+            Else
+                dgMails.Rows(Index).Cells(Item).ReadOnly = value
+                dgMails.Rows(Index).Cells(Item).Style = StyleEnabled
+
+            End If
+        End Set
+    End Property
 
 #End Region
 
@@ -170,10 +206,10 @@ Public Class frmMails
 
         'Bezeichnungen setzen (Kopieren/Verschieben)
         If frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben) = 0 Then
-            _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren)) = _Konstante.Kopieren.ToString
+            _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cCopy)) = _Konstante.Kopieren.ToString
             btnKopieren.Text = _Konstante.Kopieren.ToString
         ElseIf frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Mail_KopierenVerschieben) = 1 Then
-            _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren)) = _Konstante.Verschieben.ToString
+            _dgSetHeader(_GetdgColumnNameByEnum(_dgMailColumns.cCopy)) = _Konstante.Verschieben.ToString
             btnKopieren.Text = _Konstante.Verschieben.ToString
         End If
 
@@ -186,14 +222,24 @@ Public Class frmMails
             'E-Mails laden
             If x = 0 Then
                 'Gespeicherte Ungelesenen Nachrichten Laden
-                For y As Integer = 0 To _GetUnReadMailCount - 1
+                For y As Integer = 0 To _GetUnreadMailCount - 1
                     frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMailById(_GetUnreadMailInfo(_UnreadMailInfos.EntryId, y))
                     'frmHaupt.cConfig.oUnreadMailL(y).strEntryId)
 
                     If Not frmHaupt.cOutlook.oMail Is Nothing Then
                         dgMails.Rows.Add()
 
-                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren), i) = True
+
+                        dgMails.EndEdit()
+                        'Standardwert für Kopieren auf False setzen und Checkbox deaktiveren
+                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = False
+                        _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = True
+                        'dgMails.Rows(i).Cells(_dgMailColumns.cCopy).ReadOnly = True
+
+                        'Standardwert für Ignorieren auf False setzen und Checkbox aktiveren
+                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+                        _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+                        'dgMails.Rows(i).Cells(_dgMailColumns.cIgnore).ReadOnly = False
 
                         _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.U.ToString
 
@@ -265,7 +311,16 @@ Public Class frmMails
 
                 dgMails.Rows.Add()
 
-                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren), i) = True
+                dgMails.EndEdit()
+                'Standardwert für Kopieren auf False setzen und Checkbox deaktivieren
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = False
+                _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = True
+                'dgMails.Rows(i).Cells(_dgMailColumns.cCopy).ReadOnly = True
+
+                'Standardwert für Ignorieren auf False setzen und Checkbox aktivieren
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+                _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+                'dgMails.Rows(i).Cells(_dgMailColumns.cIgnore).ReadOnly = False
 
                 If x = 0 Then 'Posteingang
                     _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.E.ToString
@@ -318,58 +373,8 @@ Public Class frmMails
 
                 _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i) = _GetMailInfo(_MailInfos.EntryID)
 
-                bIgnoreListe = False
-                bIgnoreListeKomplett = False
-
-                'Ignore Liste durchsuchen
-                GetIgnoreList(bIgnoreListe, bIgnoreListeKomplett, strAdresse, strDomain)
-
-                'Adresse nicht in IgnoreListe
-                If bIgnoreListe = False Then
-
-                    'Komplette E-Mail Adresse in Domäne
-                    If bIgnoreListeKomplett = True Then
-
-                        'Suche nach Ordner anhand der E-Mail Adresse
-                        If _GetMailInfo(_MailInfos.Unread) = False Then
-                            frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain(strAdresse), _
-                                                  Nothing, _
-                                                  Nothing, _
-                                                  _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i), _
-                                                  _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
-                                                  _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
-                        Else
-                            frmHaupt.cConfig.AddUnreadMail(strAdresse, _GetMailInfo(_MailInfos.EntryID))
-
-                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.U.ToString
-
-                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.UNGELESEN.ToString + " ---"
-                        End If
-
-
-                    Else 'Suche nach Ordner anhand der Domäne
-
-                        If _GetMailInfo(_MailInfos.Unread) = False Then
-                            frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain("@" & strDomain), _
-                                                   Nothing, _
-                                                   Nothing, _
-                                                   _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i), _
-                                                   _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
-                                                   _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
-                        Else
-                            frmHaupt.cConfig.AddUnreadMail("@" & strDomain, _GetMailInfo(_MailInfos.EntryID))
-
-                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.U.ToString
-
-                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.UNGELESEN.ToString + " ---"
-                        End If
-
-                    End If
-
-                Else 'Eintrag ist in IgnoreList
-                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.IGNORE.ToString + " ---"
-
-                End If
+                'Prüfen ob E-Mail in IgnoreListe ansonsten Ordner suchen
+                CheckMail(i, strAdresse, strDomain)
 
                 'Nächste Mail laden
                 frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetNextMail
@@ -440,17 +445,57 @@ Public Class frmMails
         End If
     End Sub
 
+    Private Sub dgMails_CellContentClick(sender As Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgMails.CellContentClick
+        If _dgSelectedColumn = _dgMailColumns.cIgnore And _
+           dgMails.Rows(_dgSelected).Cells(_dgMailColumns.cIgnore).ReadOnly = False Then
+            Dim msgResult As MsgBoxResult
+            Dim i As Integer = _dgSelected
+            Dim strIgnore As String = ""
+
+            'Nachfrage beim Anwender
+            msgResult = MsgBox("Wollen Sie den Absender/Empfänger auf die IgnoreListe setzen?", MsgBoxStyle.YesNo, "Absender/Empfänger auf IgnoreListe setzen")
+
+            'Entscheidung auswerten
+            Select Case msgResult
+                Case MsgBoxResult.Yes
+                    strIgnore = _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i)
+
+                    'Domäne aus Mail Adresse extrahieren
+                    If Not strIgnore.IndexOf("@") - 1 Then
+                        strIgnore = strIgnore.Split("@")(1).ToString
+
+                    End If
+
+                    'Wert zu IgnoreListe hinzufügen
+                    frmHaupt.cConfig.AddIgnoreList("@" + strIgnore)
+
+                    'Liste nochmals durchgehen ob mehrer Mails von dem Absender/Empfänger vorhanden
+                    dgReCheck()
+
+            End Select
+
+
+            'Edit Modus verlassen um Wert Checkbox zu verändern
+            dgMails.EndEdit()
+
+            'CheckBox verändern
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+
+        End If
+
+    End Sub
+
     Private Sub dgMails_CellDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgMails.CellDoubleClick
         'Temp-String deklarieren
         Dim strTemp As String = ""
 
         'Doppelklick auf Spalte 1 (MSGBOX)
-        If _dgSelectedColumn = 1 Then
+        If _dgSelectedColumn = _dgMailColumns.cMail Then
             MsgBox(_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMail), _dgSelected), _
                    MsgBoxStyle.OkOnly, _
                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), _dgSelected))
 
-        ElseIf _dgSelectedColumn = 3 Then 'Doppelklick auf Spalte Ordner (Ordner Auswahl)
+        ElseIf _dgSelectedColumn = _dgMailColumns.cOrdner Then 'Doppelklick auf Spalte Ordner (Ordner Auswahl)
             'String merken (falls ---IGNORE---)
             strTemp = _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), _dgSelected)
 
@@ -495,8 +540,115 @@ Public Class frmMails
                                                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), _dgSelected))
                 End If
 
+                dgMails.EndEdit()
+                'Standardwert für Kopieren auf True setzen und Checkbox aktivieren
+
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), _dgSelected) = True
+                _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), _dgSelected) = False
+                'dgMails.Rows(_dgSelected).Cells(_dgMailColumns.cCopy).ReadOnly = False
+
+                'Standardwert für Ignorieren auf False setzen und Checkbox deaktivierne
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), _dgSelected) = False
+                _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), _dgSelected) = True
+                'dgMails.Rows(_dgSelected).Cells(_dgMailColumns.cIgnore).ReadOnly = True
+
+                'Liste nochmals durchgehen ob mehrer Mails von dem Absender/Empfänger vorhanden
+                dgReCheck()
+
             End If
         End If
+    End Sub
+
+    Private Sub CheckMail(i As Integer, strAdresse As String, Optional strDomain As String = Nothing)
+        Dim bIgnoreListe As Boolean = False
+        Dim bIgnoreListeKomplett As Boolean = False
+
+        'Domäne muss ermittelt werden
+        If strDomain = "" Or strDomain Is Nothing Then
+            If Not strAdresse.IndexOf("@") - 1 Then
+                strDomain = strAdresse.Split("@")(1).ToString
+
+            Else
+                strDomain = strAdresse
+
+            End If
+        End If
+
+        'Ignore Liste durchsuchen
+        GetIgnoreList(bIgnoreListe, bIgnoreListeKomplett, strAdresse, strDomain)
+
+        'Adresse nicht in IgnoreListe
+        If bIgnoreListe = False Then
+
+            'Komplette E-Mail Adresse in Domäne
+            If bIgnoreListeKomplett = True Then
+
+                'Suche nach Ordner anhand der E-Mail Adresse
+                If _GetMailInfo(_MailInfos.Unread) = False Then
+                    frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain(strAdresse), _
+                                          Nothing, _
+                                          Nothing, _
+                                          _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i), _
+                                          _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
+                                          _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
+                Else
+                    frmHaupt.cConfig.AddUnreadMail(strAdresse, _GetMailInfo(_MailInfos.EntryID))
+
+                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.U.ToString
+
+                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.UNGELESEN.ToString + " ---"
+                End If
+
+
+            Else 'Suche nach Ordner anhand der Domäne
+                If _GetMailInfo(_MailInfos.Unread) = False Then
+                    frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain("@" & strDomain), _
+                                           Nothing, _
+                                           Nothing, _
+                                           _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i), _
+                                           _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
+                                           _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
+
+                    'Checkbox zum Kopieren aktivieren
+                    If Not _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "" Then
+                        dgMails.EndEdit()
+                        'Standardwert für Kopieren auf True setzen und Checkbox aktiveren
+                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = True
+                        _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = False
+                        'dgMails.Rows(i).Cells(_dgMailColumns.cCopy).ReadOnly = False
+
+                        'Standardwert für Kopieren auf False setzen und Checkbox deaktiveren
+                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+                        _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = True
+                        'dgMails.Rows(i).Cells(_dgMailColumns.cIgnore).ReadOnly = True
+
+                    End If
+
+                Else
+                    frmHaupt.cConfig.AddUnreadMail("@" & strDomain, _GetMailInfo(_MailInfos.EntryID))
+
+                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.U.ToString
+
+                    _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.UNGELESEN.ToString + " ---"
+                End If
+
+            End If
+
+        Else 'Eintrag ist in IgnoreList
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.IGNORE.ToString + " ---"
+
+        End If
+    End Sub
+
+    Private Sub dgReCheck()
+        'Alle Zeilen im DataGrid nochmals durchgehen und bei jenen Ohne Ordner prüfen ob ein Ordner ermittelt werden kann
+        For i = 0 To dgMails.Rows.Count - 1
+            'Prüfen ob Feld
+            If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "" Then
+                'Prüfen ob E-Mail in IgnoreListe ansonsten Ordner suchen
+                CheckMail(i, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i))
+            End If
+        Next
     End Sub
 
 #End Region
@@ -513,7 +665,7 @@ Public Class frmMails
         'Alle E-Mail kopieren/verschieben
         Do While dgMails.Rows.Count > 0
             'E-Mail ist zum kopieren/verschieben markiert
-            If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cKopieren), i) = True Then
+            If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = True Then
                 frmHaupt.cOutlook.CopyMail(_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i), _
                                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
                                            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i), _
