@@ -107,9 +107,9 @@ Module mdlHaupt
 
             If MsgBox("Es steht ein Update zur Verfügung!!!" & vbNewLine & _
                       "Aktuelle Version: " & _strVersion_Lokal & vbNewLine & _
-                      "Neue Version: " & _strVersion_Remote & " (" & _strUpdate_Pfad & ")" & vbNewLine & _
+                      "Verfügbare Version: " & _strVersion_Remote & " (" & _strUpdate_Pfad & ")" & vbNewLine & _
                       vbNewLine & _
-                      "Wollen Sie dies verwenden?", MsgBoxStyle.YesNo, "KdMails.net Auto Update") = vbYes Then
+                      "Wollen Sie diese verwenden?", MsgBoxStyle.YesNo, "KdMails.net Auto Update") = vbYes Then
 
                 Dim strCommand As String = ""
 

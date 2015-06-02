@@ -45,6 +45,8 @@ Public Class frmOptionen
         txtKennwort.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.DB_Kennwort)
 
         txtLDAP.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.LDAP_Domain)
+        txtLDAP_Benutzer.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.LDAP_Benutzer)
+        txtLDAP_Kennwort.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.LDAP_Kennwort)
 
         txtOrdnerEingang.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 1)
         txtOrdnerEingangEID.Text = frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 2)
@@ -136,6 +138,8 @@ Public Class frmOptionen
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Benutzer, txtBenutzer.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.DB_Kennwort, txtKennwort.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LDAP_Domain, txtLDAP.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LDAP_Benutzer, txtLDAP_Benutzer.Text)
+        frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LDAP_Kennwort, txtLDAP_Kennwort.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Eingang, txtOrdnerEingang.Text, txtOrdnerEingangEID.Text, txtOrdnerEingangSID.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Gesendet, txtOrdnerAusgang.Text, txtOrdnerAusgangEID.Text, txtOrdnerAusgangSID.Text)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.Ordner_Ziel, txtOrdnerZiel.Text, txtOrdnerZielEID.Text, txtOrdnerZielSID.Text)

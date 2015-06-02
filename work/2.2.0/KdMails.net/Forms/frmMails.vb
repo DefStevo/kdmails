@@ -1,9 +1,15 @@
 ﻿#Region "Imports"
 Imports Microsoft.Office.Interop
+Imports KdMails.net.clsLogging
 
 #End Region
 
 Public Class frmMails
+    Private sPOSLog As New sLogPOSInfos
+    Private fFileDialog As New OpenFileDialog
+
+    Public Protokoll As Boolean = False
+    Public strProtokoll As String
 
 #Region "Enum"
     Private Enum _Konstante
@@ -36,6 +42,7 @@ Public Class frmMails
         cCopy = 6
         cIgnore = 7
         cMailAdr = 8
+        cTime = 9
 
     End Enum
 
@@ -95,6 +102,8 @@ Public Class frmMails
                 Return "cIgnore"
             Case 8
                 Return "cMailAdress"
+            Case 9
+                Return "cTime"
             Case Else
                 Return ""
         End Select
@@ -152,7 +161,7 @@ Public Class frmMails
 
     Private ReadOnly Property _GetUnreadMailCount() As Integer
         Get
-            Return frmHaupt.cConfig.oUnreadMailL.Count
+            Return frmHaupt.cConfig.GetUnreadMailCount
         End Get
     End Property
 
@@ -164,10 +173,10 @@ Public Class frmMails
             Dim StyleDisabled As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
             Dim StyleEnabled As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
 
-            StyleEnabled.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+            'StyleEnabled.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
             StyleEnabled.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
             StyleEnabled.NullValue = False
-            StyleDisabled.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+            'StyleDisabled.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
             StyleDisabled.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
             StyleDisabled.NullValue = False
             StyleDisabled.BackColor = Color.Gray
@@ -189,10 +198,141 @@ Public Class frmMails
 #Region "Subs"
     Private Sub frmMails_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
+        FensterAnpassen()
+
         Me.Show()
 
         Cursor.Current = Cursors.WaitCursor
 
+        If Not Protokoll Then
+            Verarbeitungslauf()
+        Else
+            'Tabelle leeren
+            Do While dgMails.Rows.Count > 0
+                dgMails.Rows.Remove(dgMails.Rows(0))
+            Loop
+
+            Me.Refresh()
+
+            If strProtokoll = "" Then
+                fFileDialog = New OpenFileDialog
+                fFileDialog.InitialDirectory = My.Application.Info.DirectoryPath & "\LOG\"
+                fFileDialog.ShowDialog()
+
+                If Not fFileDialog.FileName = "" Then
+                    strProtokoll = fFileDialog.FileName
+                    LadeProtokoll()
+                End If
+            Else
+                LadeProtokoll()
+            End If
+        End If
+
+        Cursor.Current = Cursors.Default
+
+    End Sub
+
+    Private Sub FensterAnpassen()
+        If Not Protokoll Then
+            Me.Text = "KdMails.net - Kundenmails kopieren - Übersicht"
+            Me.Width = 900
+            Me.Height = 700
+
+            PanelOben.Visible = False
+
+            dgMails.Width = 873
+            dgMails.Height = 405
+            dgMails.Left = 0
+            dgMails.Top = 0
+
+            btnKopieren.Visible = True
+            btnKopieren.Width = 300
+            btnKopieren.Height = 20
+            btnKopieren.Left = 0
+            btnKopieren.Top = 0
+
+            btnAbbrechen.Width = 300
+            btnAbbrechen.Height = 20
+            btnAbbrechen.Left = 573
+            btnAbbrechen.Top = 0
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cEA)).Width = 25
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cEA)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMail)).Width = 400
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMail)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID)).Width = 5
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID)).Visible = False
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner)).Width = 250
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID)).Width = 5
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID)).Visible = False
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID)).Width = 5
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID)).Visible = False
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cCopy)).Width = 80
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cCopy)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore)).Width = 80
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr)).Width = 5
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr)).Visible = False
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cTime)).Width = 5
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cTime)).Visible = False
+
+            dgMails.ScrollBars = ScrollBars.Vertical
+
+        Else
+            Me.Text = "KdMails.net - Kundenmails kopieren - Protokoll"
+            Me.Width = 1450
+            Me.Height = 700
+
+            PanelOben.Visible = True
+
+            btnKopieren.Visible = False
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cEA)).Width = 25
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cEA)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMail)).Width = 400
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMail)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID)).Width = 100
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner)).Width = 250
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID)).Width = 100
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID)).Width = 100
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cCopy)).Width = 80
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cCopy)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore)).Width = 80
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr)).Width = 100
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr)).Visible = True
+
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cTime)).Width = 150
+            dgMails.Columns(_GetdgColumnNameByEnum(_dgMailColumns.cTime)).Visible = True
+
+            dgMails.ScrollBars = ScrollBars.Both
+
+        End If
+    End Sub
+
+    Private Sub Verarbeitungslauf()
         Dim i As Integer = 0
         Dim strDomain As String = ""
         Dim strAdresse As String = ""
@@ -213,7 +353,6 @@ Public Class frmMails
             btnKopieren.Text = _Konstante.Verschieben.ToString
         End If
 
-
         'Durchlauf für 
         'Posteingang x = 0, 
         'Gesendete Objekte x = 1
@@ -222,13 +361,15 @@ Public Class frmMails
             'E-Mails laden
             If x = 0 Then
                 'Gespeicherte Ungelesenen Nachrichten Laden
+                'Anzahl der Mails für die Protokollierung (Ungelesen Mails): _GetUnreadMailCount
                 For y As Integer = 0 To _GetUnreadMailCount - 1
+                    frmHaupt.sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Anzahl_Ungelesen, _GetUnreadMailCount.ToString())
+
                     frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMailById(_GetUnreadMailInfo(_UnreadMailInfos.EntryId, y))
                     'frmHaupt.cConfig.oUnreadMailL(y).strEntryId)
 
                     If Not frmHaupt.cOutlook.oMail Is Nothing Then
                         dgMails.Rows.Add()
-
 
                         dgMails.EndEdit()
                         'Standardwert für Kopieren auf False setzen und Checkbox deaktiveren
@@ -285,6 +426,21 @@ Public Class frmMails
                                                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
                                                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
 
+                            'Checkbox zum Kopieren aktivieren
+                            If Not _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "" Then
+                                dgMails.EndEdit()
+                                'Standardwert für Kopieren auf True setzen und Checkbox aktiveren
+                                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = True
+                                _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = False
+                                'dgMails.Rows(i).Cells(_dgMailColumns.cCopy).ReadOnly = False
+
+                                'Standardwert für Kopieren auf False setzen und Checkbox deaktiveren
+                                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+                                _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = True
+                                'dgMails.Rows(i).Cells(_dgMailColumns.cIgnore).ReadOnly = True
+
+                            End If
+
                         Else
                             'Eintrag ist weiterhin ungelesen
                             _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.UNGELESEN.ToString + " ---"
@@ -300,9 +456,18 @@ Public Class frmMails
 
                 frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMails(frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 2), _
                                                                      frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Eingang, 3))
+
+                'Anzahl der Mails für die Protokollierung (Posteingang): frmHaupt.cOutlook.iCount
+                frmHaupt.sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Anzahl_Posteingang, frmHaupt.cOutlook.iCount.ToString())
+
+
             ElseIf x = 1 Then
                 frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetMails(frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Gesendet, 2), _
                                                                      frmHaupt.cConfig.GetSettings(clsConfig.ESettings.Ordner_Gesendet, 3))
+
+                'Anzahl der Mails für die Protokollierung (Postausgang): frmHaupt.cOutlook.iCount
+                frmHaupt.sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Anzahl_Postausgang, frmHaupt.cOutlook.iCount.ToString())
+
             End If
 
             'Schleife über alle E-Mails des Ordners
@@ -317,7 +482,7 @@ Public Class frmMails
                 _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = True
                 'dgMails.Rows(i).Cells(_dgMailColumns.cCopy).ReadOnly = True
 
-                'Standardwert für Ignorieren auf False setzen und Checkbox aktivieren
+                'Standardwert für Ignorieren auf True setzen und Checkbox aktivieren
                 _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
                 _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
                 'dgMails.Rows(i).Cells(_dgMailColumns.cIgnore).ReadOnly = False
@@ -386,8 +551,63 @@ Public Class frmMails
 
         'Button Enablen
         btnKopieren.Enabled = True
+    End Sub
 
-        Cursor.Current = Cursors.Default
+    Private Sub LadeProtokoll()
+        frmHaupt.cLoggingRead.InitLOG()
+        frmHaupt.cLoggingRead.ReadLog(strProtokoll)
+
+        strDatei.Text = strProtokoll
+        strVersion.Text = frmHaupt.cLoggingRead.oLogHDRInfosL(0).strVersion
+        strAktLauf.Text = frmHaupt.cLoggingRead.oLogHDRInfosL(0).strAktueller_Lauf
+        strVorhLauf.Text = frmHaupt.cLoggingRead.oLogHDRInfosL(0).strLetzter_Lauf
+        strPosteingang.Text = frmHaupt.cLoggingRead.oLogHDRInfosL(0).strAnzahl_Posteingang
+        strGesendet.Text = frmHaupt.cLoggingRead.oLogHDRInfosL(0).strAnzahl_Postausgang
+        strUngelesen.Text = frmHaupt.cLoggingRead.oLogHDRInfosL(0).strAnzahl_Ungelesen
+        strUngelesenNeu.Text = frmHaupt.cLoggingRead.oLogHDRInfosL(0).strAnzahl_Ungelesen_Neu
+
+        'Loggingzeilen laden
+        For i As Integer = 0 To frmHaupt.cLoggingRead.oLogPOSInfosL.Count - 1
+            dgMails.Rows.Add()
+            dgMails.EndEdit()
+
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = frmHaupt.cLoggingRead.oLogPOSInfosL(i).strEA
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMail), i) = frmHaupt.cLoggingRead.oLogPOSInfosL(i).strMail
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i) = frmHaupt.cLoggingRead.oLogPOSInfosL(i).strMailADR
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i) = frmHaupt.cLoggingRead.oLogPOSInfosL(i).strMailEID
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = frmHaupt.cLoggingRead.oLogPOSInfosL(i).strOrdner
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i) = frmHaupt.cLoggingRead.oLogPOSInfosL(i).strOrdnerEID
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i) = frmHaupt.cLoggingRead.oLogPOSInfosL(i).strOrdnerSID
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cTime), i) = frmHaupt.cLoggingRead.oLogPOSInfosL(i).strZeit
+
+            If frmHaupt.cLoggingRead.oLogPOSInfosL(i).strKopieren = "True" Then
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = True
+
+            Else
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = False
+
+            End If
+
+            If frmHaupt.cLoggingRead.oLogPOSInfosL(i).strIgnorieren = "True" Then
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = True
+
+            Else
+                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+
+            End If
+
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cMail), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cTime), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i) = True
+            _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = True
+
+        Next
 
     End Sub
 
@@ -474,12 +694,11 @@ Public Class frmMails
 
             End Select
 
-
             'Edit Modus verlassen um Wert Checkbox zu verändern
             dgMails.EndEdit()
 
             'CheckBox verändern
-            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
+            _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = True
 
         End If
 
@@ -562,6 +781,11 @@ Public Class frmMails
     Private Sub CheckMail(i As Integer, strAdresse As String, Optional strDomain As String = Nothing)
         Dim bIgnoreListe As Boolean = False
         Dim bIgnoreListeKomplett As Boolean = False
+
+        'Wenn keine gültige Mail Adresse übergeben wird (ausgetretene/gelöschte Mitarbeiter)
+        If strAdresse = "???" Then
+            strDomain = "???"
+        End If
 
         'Domäne muss ermittelt werden
         If strDomain = "" Or strDomain Is Nothing Then
@@ -676,23 +900,56 @@ Public Class frmMails
                     'Ungelesenen Nachricht kann aus Liste entfernt werden
                     frmHaupt.cConfig.RemoveUnreadMails(-1, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i))
                 End If
+            ElseIf _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = "U" And _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.IGNORE.ToString + " ---" Then
+                frmHaupt.cConfig.RemoveUnreadMails(-1, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i))
             End If
 
+
+
             'Zeile aus Datagrid entfernen
+
+            sPOSLog = New sLogPOSInfos
+            sPOSLog.SetInfo(ELogPOSInfos.EA, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i))
+            If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.IGNORE.ToString + " ---" Then
+                sPOSLog.SetInfo(ELogPOSInfos.Ignorieren, "True")
+            End If
+            sPOSLog.SetInfo(ELogPOSInfos.Kopieren, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cCopy), i))
+            sPOSLog.SetInfo(ELogPOSInfos.Mail, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMail), i))
+            sPOSLog.SetInfo(ELogPOSInfos.MailADR, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailAdr), i))
+            sPOSLog.SetInfo(ELogPOSInfos.MailEID, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i))
+            sPOSLog.SetInfo(ELogPOSInfos.Ordner, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i))
+            sPOSLog.SetInfo(ELogPOSInfos.OrdnerEID, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i))
+            sPOSLog.SetInfo(ELogPOSInfos.OrdnerSID, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
+            sPOSLog.SetInfo(ELogPOSInfos.Zeit, Now.ToString() + "." + If(Now.Millisecond < 100, "0", "") + Now.Millisecond.ToString("000"))
+            frmHaupt.cLogging.oLogPOSInfosL.Add(sPOSLog)
+
             dgMails.Rows.Remove(dgMails.Rows(i))
             Me.Refresh()
 
         Loop
+        frmHaupt.sHDRLog.SetInfo(ELogHDRInfos.Anzahl_Ungelesen_Neu, _GetUnreadMailCount.ToString())
 
         'Schreiben des Zeitpunkt Letzer Lauf (Datum/Uhrzeit des Programmstart)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LetzerLauf_Datum, frmHaupt.strDate)
         frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LetzerLauf_Zeit, frmHaupt.strTime)
+        frmHaupt.sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Aktueller_Lauf, frmHaupt.strDate & " " & frmHaupt.strTime)
         frmHaupt.cConfig.WriteConfigSettings()
+        frmHaupt.cConfig.WriteConfigIgnore()
         frmHaupt.cConfig.WriteConfigUnreadMails()
+
+        frmHaupt.cLogging.oLogHDRInfosL.Add(frmHaupt.sHDRLog)
+        frmHaupt.cLogging.WriteLog(frmHaupt.strLogFile)
 
         Cursor.Current = Cursors.Default
     End Sub
 
 #End Region
 
+    Private Sub Panel1_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs) Handles PanelUnten.Paint
+
+    End Sub
+
+    Private Sub PanelOben_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs) Handles PanelOben.Paint
+
+    End Sub
 End Class
