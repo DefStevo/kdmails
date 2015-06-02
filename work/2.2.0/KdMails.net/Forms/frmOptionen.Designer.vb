@@ -75,9 +75,12 @@ Partial Class frmOptionen
         Me.txtLDAP = New System.Windows.Forms.TextBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.grpAutoUpdate = New System.Windows.Forms.GroupBox()
+        Me.btnUpdatePfad = New System.Windows.Forms.Button()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtUpdatePfad = New System.Windows.Forms.TextBox()
-        Me.btnUpdatePfad = New System.Windows.Forms.Button()
+        Me.txtLDAP_Benutzer = New System.Windows.Forms.TextBox()
+        Me.txtLDAP_Kennwort = New System.Windows.Forms.TextBox()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.grpDatenbank.SuspendLayout()
         CType(Me.dgDomain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpOutlook.SuspendLayout()
@@ -91,7 +94,7 @@ Partial Class frmOptionen
         'btnSpeichern
         '
         Me.btnSpeichern.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnSpeichern.Location = New System.Drawing.Point(1, 361)
+        Me.btnSpeichern.Location = New System.Drawing.Point(1, 387)
         Me.btnSpeichern.Name = "btnSpeichern"
         Me.btnSpeichern.Size = New System.Drawing.Size(140, 21)
         Me.btnSpeichern.TabIndex = 2
@@ -101,7 +104,7 @@ Partial Class frmOptionen
         'btnAbbrechen
         '
         Me.btnAbbrechen.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnAbbrechen.Location = New System.Drawing.Point(161, 361)
+        Me.btnAbbrechen.Location = New System.Drawing.Point(161, 387)
         Me.btnAbbrechen.Name = "btnAbbrechen"
         Me.btnAbbrechen.Size = New System.Drawing.Size(140, 21)
         Me.btnAbbrechen.TabIndex = 3
@@ -281,7 +284,7 @@ Partial Class frmOptionen
         Me.grpOutlook.Controls.Add(Me.Label8)
         Me.grpOutlook.Controls.Add(Me.txtOrdnerZiel)
         Me.grpOutlook.Controls.Add(Me.txtOrdnerAusgang)
-        Me.grpOutlook.Location = New System.Drawing.Point(1, 203)
+        Me.grpOutlook.Location = New System.Drawing.Point(1, 229)
         Me.grpOutlook.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.grpOutlook.Name = "grpOutlook"
         Me.grpOutlook.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
@@ -522,7 +525,7 @@ Partial Class frmOptionen
         Me.btnDebug.FlatAppearance.BorderColor = System.Drawing.Color.White
         Me.btnDebug.FlatAppearance.BorderSize = 0
         Me.btnDebug.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDebug.Location = New System.Drawing.Point(143, 361)
+        Me.btnDebug.Location = New System.Drawing.Point(143, 387)
         Me.btnDebug.Name = "btnDebug"
         Me.btnDebug.Size = New System.Drawing.Size(15, 19)
         Me.btnDebug.TabIndex = 12
@@ -572,13 +575,16 @@ Partial Class frmOptionen
         '
         'grpLDAP
         '
+        Me.grpLDAP.Controls.Add(Me.Label9)
+        Me.grpLDAP.Controls.Add(Me.txtLDAP_Kennwort)
+        Me.grpLDAP.Controls.Add(Me.txtLDAP_Benutzer)
         Me.grpLDAP.Controls.Add(Me.Label11)
         Me.grpLDAP.Controls.Add(Me.txtLDAP)
         Me.grpLDAP.Location = New System.Drawing.Point(1, 129)
         Me.grpLDAP.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.grpLDAP.Name = "grpLDAP"
         Me.grpLDAP.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.grpLDAP.Size = New System.Drawing.Size(300, 36)
+        Me.grpLDAP.Size = New System.Drawing.Size(300, 62)
         Me.grpLDAP.TabIndex = 17
         Me.grpLDAP.TabStop = False
         Me.grpLDAP.Text = "LDAP (AD)"
@@ -605,7 +611,7 @@ Partial Class frmOptionen
         Me.grpAutoUpdate.Controls.Add(Me.btnUpdatePfad)
         Me.grpAutoUpdate.Controls.Add(Me.Label7)
         Me.grpAutoUpdate.Controls.Add(Me.txtUpdatePfad)
-        Me.grpAutoUpdate.Location = New System.Drawing.Point(1, 166)
+        Me.grpAutoUpdate.Location = New System.Drawing.Point(1, 192)
         Me.grpAutoUpdate.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.grpAutoUpdate.Name = "grpAutoUpdate"
         Me.grpAutoUpdate.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
@@ -613,6 +619,16 @@ Partial Class frmOptionen
         Me.grpAutoUpdate.TabIndex = 18
         Me.grpAutoUpdate.TabStop = False
         Me.grpAutoUpdate.Text = "Auto Update"
+        '
+        'btnUpdatePfad
+        '
+        Me.btnUpdatePfad.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnUpdatePfad.Location = New System.Drawing.Point(270, 11)
+        Me.btnUpdatePfad.Name = "btnUpdatePfad"
+        Me.btnUpdatePfad.Size = New System.Drawing.Size(27, 21)
+        Me.btnUpdatePfad.TabIndex = 16
+        Me.btnUpdatePfad.Text = "..."
+        Me.btnUpdatePfad.UseVisualStyleBackColor = True
         '
         'Label7
         '
@@ -632,15 +648,31 @@ Partial Class frmOptionen
         Me.txtUpdatePfad.Size = New System.Drawing.Size(202, 22)
         Me.txtUpdatePfad.TabIndex = 0
         '
-        'btnUpdatePfad
+        'txtLDAP_Benutzer
         '
-        Me.btnUpdatePfad.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnUpdatePfad.Location = New System.Drawing.Point(270, 11)
-        Me.btnUpdatePfad.Name = "btnUpdatePfad"
-        Me.btnUpdatePfad.Size = New System.Drawing.Size(27, 21)
-        Me.btnUpdatePfad.TabIndex = 16
-        Me.btnUpdatePfad.Text = "..."
-        Me.btnUpdatePfad.UseVisualStyleBackColor = True
+        Me.txtLDAP_Benutzer.Location = New System.Drawing.Point(67, 35)
+        Me.txtLDAP_Benutzer.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.txtLDAP_Benutzer.Name = "txtLDAP_Benutzer"
+        Me.txtLDAP_Benutzer.Size = New System.Drawing.Size(114, 22)
+        Me.txtLDAP_Benutzer.TabIndex = 5
+        '
+        'txtLDAP_Kennwort
+        '
+        Me.txtLDAP_Kennwort.Location = New System.Drawing.Point(182, 35)
+        Me.txtLDAP_Kennwort.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.txtLDAP_Kennwort.Name = "txtLDAP_Kennwort"
+        Me.txtLDAP_Kennwort.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.txtLDAP_Kennwort.Size = New System.Drawing.Size(114, 22)
+        Me.txtLDAP_Kennwort.TabIndex = 6
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(0, 38)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(56, 13)
+        Me.Label9.TabIndex = 7
+        Me.Label9.Text = "User/Pass"
         '
         'frmOptionen
         '
@@ -648,7 +680,7 @@ Partial Class frmOptionen
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.ClientSize = New System.Drawing.Size(838, 385)
+        Me.ClientSize = New System.Drawing.Size(838, 412)
         Me.Controls.Add(Me.grpAutoUpdate)
         Me.Controls.Add(Me.grpLDAP)
         Me.Controls.Add(Me.grpIgnore)
@@ -736,5 +768,8 @@ Partial Class frmOptionen
     Friend WithEvents btnUpdatePfad As System.Windows.Forms.Button
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents txtUpdatePfad As System.Windows.Forms.TextBox
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents txtLDAP_Kennwort As System.Windows.Forms.TextBox
+    Friend WithEvents txtLDAP_Benutzer As System.Windows.Forms.TextBox
 
 End Class

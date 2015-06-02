@@ -35,6 +35,7 @@ Partial Class frmChangeLog
         '
         'btnOK
         '
+        Me.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.btnOK.Location = New System.Drawing.Point(425, 3)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
@@ -44,6 +45,7 @@ Partial Class frmChangeLog
         '
         'txtDatum
         '
+        Me.txtDatum.BackColor = System.Drawing.SystemColors.Control
         Me.txtDatum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtDatum.Location = New System.Drawing.Point(161, 3)
         Me.txtDatum.Name = "txtDatum"
@@ -97,6 +99,7 @@ Partial Class frmChangeLog
         '
         'txtVersion
         '
+        Me.txtVersion.BackColor = System.Drawing.SystemColors.Control
         Me.txtVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtVersion.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtVersion.Location = New System.Drawing.Point(101, 3)
@@ -107,6 +110,7 @@ Partial Class frmChangeLog
         '
         'txtAnderung
         '
+        Me.txtAnderung.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.txtAnderung.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtAnderung.Location = New System.Drawing.Point(1, 28)
         Me.txtAnderung.Multiline = True
@@ -115,10 +119,11 @@ Partial Class frmChangeLog
         Me.txtAnderung.Size = New System.Drawing.Size(499, 221)
         Me.txtAnderung.TabIndex = 7
         '
-        'frmHistorie
+        'frmChangeLog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(502, 251)
         Me.Controls.Add(Me.txtAnderung)
         Me.Controls.Add(Me.txtVersion)
@@ -131,7 +136,7 @@ Partial Class frmChangeLog
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "frmHistorie"
+        Me.Name = "frmChangeLog"
         Me.Text = "KdMails.net - Kundenmails kopieren - Änderungshistorie"
         Me.ResumeLayout(False)
         Me.PerformLayout()

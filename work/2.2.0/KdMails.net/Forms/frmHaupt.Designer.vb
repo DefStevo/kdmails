@@ -33,6 +33,7 @@ Partial Class frmHaupt
         Me.stDB = New System.Windows.Forms.ToolStripStatusLabel()
         Me.stStatus = New System.Windows.Forms.ToolStripStatusLabel()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.btnProtokoll = New System.Windows.Forms.Button()
         CType(Me.picMail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.frmHauptStatus.SuspendLayout()
         Me.SuspendLayout()
@@ -56,7 +57,7 @@ Partial Class frmHaupt
         Me.btnLos.Location = New System.Drawing.Point(83, 0)
         Me.btnLos.Margin = New System.Windows.Forms.Padding(2, 3, 2, 3)
         Me.btnLos.Name = "btnLos"
-        Me.btnLos.Size = New System.Drawing.Size(284, 37)
+        Me.btnLos.Size = New System.Drawing.Size(284, 25)
         Me.btnLos.TabIndex = 1
         Me.btnLos.Text = "Lo&s"
         Me.btnLos.UseVisualStyleBackColor = True
@@ -66,10 +67,10 @@ Partial Class frmHaupt
         Me.btnOptionen.Enabled = False
         Me.btnOptionen.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.btnOptionen.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnOptionen.Location = New System.Drawing.Point(83, 38)
+        Me.btnOptionen.Location = New System.Drawing.Point(83, 26)
         Me.btnOptionen.Margin = New System.Windows.Forms.Padding(2, 3, 2, 3)
         Me.btnOptionen.Name = "btnOptionen"
-        Me.btnOptionen.Size = New System.Drawing.Size(284, 37)
+        Me.btnOptionen.Size = New System.Drawing.Size(284, 25)
         Me.btnOptionen.TabIndex = 2
         Me.btnOptionen.Text = "&Optionen"
         Me.btnOptionen.UseVisualStyleBackColor = True
@@ -80,7 +81,7 @@ Partial Class frmHaupt
         Me.frmHauptStatus.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible
         Me.frmHauptStatus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.stOutlook, Me.stLDAP, Me.stDB, Me.stStatus})
         Me.frmHauptStatus.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
-        Me.frmHauptStatus.Location = New System.Drawing.Point(0, 75)
+        Me.frmHauptStatus.Location = New System.Drawing.Point(0, 81)
         Me.frmHauptStatus.Name = "frmHauptStatus"
         Me.frmHauptStatus.Padding = New System.Windows.Forms.Padding(1, 0, 12, 0)
         Me.frmHauptStatus.Size = New System.Drawing.Size(368, 21)
@@ -133,13 +134,27 @@ Partial Class frmHaupt
         '
         Me.Timer1.Interval = 1
         '
+        'btnProtokoll
+        '
+        Me.btnProtokoll.Enabled = False
+        Me.btnProtokoll.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnProtokoll.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnProtokoll.Location = New System.Drawing.Point(83, 52)
+        Me.btnProtokoll.Margin = New System.Windows.Forms.Padding(2, 3, 2, 3)
+        Me.btnProtokoll.Name = "btnProtokoll"
+        Me.btnProtokoll.Size = New System.Drawing.Size(284, 25)
+        Me.btnProtokoll.TabIndex = 4
+        Me.btnProtokoll.Text = "&Protokoll"
+        Me.btnProtokoll.UseVisualStyleBackColor = True
+        '
         'frmHaupt
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.ClientSize = New System.Drawing.Size(368, 96)
+        Me.ClientSize = New System.Drawing.Size(368, 102)
+        Me.Controls.Add(Me.btnProtokoll)
         Me.Controls.Add(Me.frmHauptStatus)
         Me.Controls.Add(Me.btnOptionen)
         Me.Controls.Add(Me.btnLos)
@@ -169,5 +184,6 @@ Partial Class frmHaupt
     Friend WithEvents stOutlook As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents stLDAP As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents stDB As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents btnProtokoll As System.Windows.Forms.Button
 
 End Class

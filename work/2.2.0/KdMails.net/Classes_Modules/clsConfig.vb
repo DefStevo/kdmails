@@ -57,7 +57,6 @@
 
     Structure sUnreadMail
         Dim strAdresse As String
-
         Dim strEntryId As String
         Dim bEntfernen As Boolean
 
@@ -66,6 +65,7 @@
             strEntryId = EntryId
             bEntfernen = Entfernen
         End Sub
+
     End Structure
 
 #End Region
@@ -84,6 +84,8 @@
         LetzerLauf_Datum
         LetzerLauf_Zeit
         LDAP_Domain
+        LDAP_Benutzer
+        LDAP_Kennwort
 
     End Enum
 
@@ -843,6 +845,18 @@
 #End Region
 
 #Region "UnRead Mail Funktionen"
+    Function GetUnreadMailCount() As Integer
+        Dim iCount As Integer = 0
+
+        For i As Integer = 0 To oUnreadMailL.Count - 1
+            If Not oUnreadMailL(i).bEntfernen Then
+                iCount = iCount + 1
+            End If
+        Next
+
+        Return iCount
+    End Function
+
     Function AddUnreadMail(ByVal Adresse As String, _
                            ByVal EntryId As String) As Boolean
         If EntryId Is Nothing Then
@@ -893,6 +907,8 @@
 
         Return True
     End Function
+
+
 #End Region
 
 #End Region

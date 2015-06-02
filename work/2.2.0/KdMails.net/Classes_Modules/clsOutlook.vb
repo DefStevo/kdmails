@@ -18,6 +18,7 @@ Public Class clsOutlook
 
     Public oOrdner As Outlook.MAPIFolder
     Public oMail As Outlook.MailItem
+    Public iCount As Integer
 
     Private _iMailID As Integer
 
@@ -215,6 +216,9 @@ Public Class clsOutlook
                           frmHaupt.cConfig.GetSettings(clsConfig.ESettings.LetzerLauf_Zeit)
 
             _MSMailItems = _MSFold.Items.Restrict("[ReceivedTime] > '" & strDateLast & "'")
+
+            'Anzahl der Mails ermitteln
+            iCount = _MSMailItems.Count
 
             If _MSMailItems.Count = 0 Then
                 Return Nothing

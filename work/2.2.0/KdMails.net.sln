@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual Basic Express 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "KdMails.net", "KdMails.net\KdMails.net.vbproj", "{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "KdMails.net.Update", "KdMails.net.Update\KdMails.net.Update.vbproj", "{B5999BAD-B1C1-4441-A9C6-6204F38B269B}"
@@ -17,13 +17,14 @@ Global
 		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Debug|x86.ActiveCfg = Debug|x86
 		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Debug|x86.Build.0 = Debug|x86
-		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Release|Any CPU.ActiveCfg = Release|x86
+		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Release|Any CPU.Build.0 = Release|x86
 		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Release|x86.ActiveCfg = Release|Any CPU
 		{A42A2D6E-4991-4364-98D7-42DD6C7EF5EC}.Release|x86.Build.0 = Release|Any CPU
 		{B5999BAD-B1C1-4441-A9C6-6204F38B269B}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{B5999BAD-B1C1-4441-A9C6-6204F38B269B}.Debug|x86.ActiveCfg = Debug|x86
 		{B5999BAD-B1C1-4441-A9C6-6204F38B269B}.Release|Any CPU.ActiveCfg = Release|x86
+		{B5999BAD-B1C1-4441-A9C6-6204F38B269B}.Release|Any CPU.Build.0 = Release|x86
 		{B5999BAD-B1C1-4441-A9C6-6204F38B269B}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

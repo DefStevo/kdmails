@@ -13,9 +13,14 @@ Public Class frmHaupt
     Public Shared cDatenbank As New clsDatenbank
     Public Shared cConfig As New clsConfig
     Public Shared cLDAP As New clsLDAP
+    Public Shared cLogging As New clsLogging
+    Public Shared cLoggingRead As New clsLogging
+
+    Public Shared sHDRLog As New clsLogging.sLogHDRInfos
 
     Public strDate As String = Format(Now, "dd.MM.yyyy")
     Public strTime As String = Format(Now, "HH:mm")
+    Public strLogFile As String = Format(Now, "yyyyMMdd_HHmmss") & ".log"
 
 #End Region
 
@@ -37,9 +42,23 @@ Public Class frmHaupt
         Cursor.Current = Cursors.WaitCursor
         Me.Focus()
 
+        'Standardwerte für Logging setzen
+        sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Anzahl_Ungelesen, "0")
+        sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Anzahl_Ungelesen_Neu, "0")
+        sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Anzahl_Posteingang, "0")
+        sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Anzahl_Postausgang, "0")
+        sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Letzter_Lauf, "Kein Lauf durchgeführt")
+        sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Aktueller_Lauf, "Kein Lauf durchgeführt")
+        sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Version, _
+                  My.Application.Info.Version.Major.ToString & "." & _
+                  My.Application.Info.Version.Minor.ToString & "." & _
+                  My.Application.Info.Version.Build.ToString)
+
         'Einstellung lesen (Settings, IgnoreList, Domänen, Ordner)
         My.Settings.Upgrade()
         cConfig.InitConfig(True, True, True, True, True)
+
+        InitLog()
 
         InitOutlook()
 
@@ -50,10 +69,19 @@ Public Class frmHaupt
         'Status anzeigen
         stStatus.Text = "|Letzer Lauf: " + cConfig.GetSettings(ESettings.LetzerLauf_Datum) + " " + cConfig.GetSettings(ESettings.LetzerLauf_Zeit)
 
+        sHDRLog.SetInfo(clsLogging.ELogHDRInfos.Letzter_Lauf, cConfig.GetSettings(ESettings.LetzerLauf_Datum) + " " + cConfig.GetSettings(ESettings.LetzerLauf_Zeit))
+
         'Fertig (Fenster freigeben)
         btnLos.Enabled = True
         btnOptionen.Enabled = True
+        btnProtokoll.Enabled = True
         Cursor.Current = Cursors.Default
+    End Sub
+
+    Sub InitLog()
+        'Logging Initialisieren
+        cLogging.InitLOG()
+
     End Sub
 
     Sub InitOutlook()
@@ -75,7 +103,7 @@ Public Class frmHaupt
             stLDAP.Image = My.Resources.Status_CO
             Me.Refresh()
 
-            cLDAP.InitLDAP(cConfig.GetSettings(ESettings.LDAP_Domain))
+            cLDAP.InitLDAP(cConfig.GetSettings(ESettings.LDAP_Domain), cConfig.GetSettings(ESettings.LDAP_Benutzer), cConfig.GetSettings(ESettings.LDAP_Kennwort))
 
             If cLDAP.Status = True Then
                 stLDAP.Image = My.Resources.Status_OK
@@ -122,6 +150,9 @@ Public Class frmHaupt
 
 #Region "Buttons"
     Private Sub btnVerschieben_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLos.Click
+        cLoggingRead = New clsLogging
+        frmMails.Protokoll = False
+        frmMails.strProtokoll = ""
         frmMails.ShowDialog()
     End Sub
 
@@ -143,7 +174,15 @@ Public Class frmHaupt
 
     End Sub
 
+    Private Sub btnProtokoll_Click(sender As System.Object, e As System.EventArgs) Handles btnProtokoll.Click
+        cLoggingRead = New clsLogging
+        frmMails.Protokoll = True
+        frmMails.strProtokoll = ""
+        frmMails.ShowDialog()
+    End Sub
+
 #End Region
+
 
 
 End Class
