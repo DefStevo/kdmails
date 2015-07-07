@@ -1,0 +1,2 @@
+﻿--Version X
+	.Umbau als Outlook Addin
