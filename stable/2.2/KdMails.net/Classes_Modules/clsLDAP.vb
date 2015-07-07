@@ -84,38 +84,44 @@ Public Class clsLDAP
             Catch ex As System.Runtime.InteropServices.COMException
                 _bInitStatus = False
 
-                Select Case ex.ErrorCode
-                    Case -2147016646
-                        'LDAP-Server nicht verfügbar (falscher Server)
-                        MsgBox("Server: " + _strDomäne + vbNewLine + _
-                               ex.Message, MsgBoxStyle.Critical, "Fehler bei der Verbindung mit LDAP")
-                        _Retry = False
-                        Return False
+                If Not mdlHaupt._Batch Then
+                    'Keine Fehlermeldung im Batchmodus
+                    Select Case ex.ErrorCode
+                        Case -2147016646
+                            'LDAP-Server nicht verfügbar (falscher Server)
+                            MsgBox("Server: " + _strDomäne + vbNewLine + _
+                                   ex.Message, MsgBoxStyle.Critical, "Fehler bei der Verbindung mit LDAP")
+                            _Retry = False
+                            Return False
 
-                    Case -2147023570
-                        'Benutzer/Kennwort falsch (Formular für Benutzer Kennwort öffnen)
-                        cAnmeldung.txtDomäne.Text = _strDomäne
-                        cAnmeldung.txtBenutzer.Text = _strBenutzer
-                        cAnmeldung.txtKennwort.Text = _strKennwort
-                        cAnmeldung.ShowDialog()
+                        Case -2147023570
+                            'Benutzer/Kennwort falsch (Formular für Benutzer Kennwort öffnen)
+                            cAnmeldung.txtDomäne.Text = _strDomäne
+                            cAnmeldung.txtBenutzer.Text = _strBenutzer
+                            cAnmeldung.txtKennwort.Text = _strKennwort
+                            cAnmeldung.ShowDialog()
 
-                        'Anmeldedaten aus Fenster verwenden
-                        _Entry.Username = cAnmeldung.txtBenutzer.Text
-                        _Entry.Password = cAnmeldung.txtKennwort.Text
+                            'Anmeldedaten aus Fenster verwenden
+                            _Entry.Username = cAnmeldung.txtBenutzer.Text
+                            _Entry.Password = cAnmeldung.txtKennwort.Text
 
-                        'Anmeldedaten speichern
-                        If cAnmeldung.cbAnmeldungSpeichern.Checked Then
-                            frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LDAP_Benutzer, cAnmeldung.txtBenutzer.Text)
-                            frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LDAP_Kennwort, cAnmeldung.txtKennwort.Text)
-                        End If
+                            'Anmeldedaten speichern
+                            If cAnmeldung.cbAnmeldungSpeichern.Checked Then
+                                frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LDAP_Benutzer, cAnmeldung.txtBenutzer.Text)
+                                frmHaupt.cConfig.SetSettings(clsConfig.ESettings.LDAP_Kennwort, cAnmeldung.txtKennwort.Text)
+                            End If
 
-                    Case Else
-                        MsgBox("Server: " + _strDomäne + vbNewLine + _
-                               ex.Message, MsgBoxStyle.Critical, "Fehler bei der Verbindung mit LDAP")
-                        _Retry = False
-                        Return False
+                        Case Else
+                            MsgBox("Server: " + _strDomäne + vbNewLine + _
+                                   ex.Message, MsgBoxStyle.Critical, "Fehler bei der Verbindung mit LDAP")
+                            _Retry = False
+                            Return False
 
-                End Select
+                    End Select
+                Else
+                    'Im Fehlerfall kein weiterer Veruch im Batchmodus
+                    _Retry = False
+                End If
             End Try
         End While
 

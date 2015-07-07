@@ -34,9 +34,15 @@ Public Class frmHaupt
 
         Timer1.Interval = 1
         Timer1.Enabled = True
+
     End Sub
 
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        'Fenster im Batchmodus nicht anzeigen
+        If mdlHaupt._Batch Then
+            Me.Visible = False
+        End If
+
         Timer1.Enabled = False
 
         Cursor.Current = Cursors.WaitCursor
@@ -76,6 +82,11 @@ Public Class frmHaupt
         btnOptionen.Enabled = True
         btnProtokoll.Enabled = True
         Cursor.Current = Cursors.Default
+
+        If mdlHaupt._Batch Then
+            btnVerschieben_Click(sender, e)
+            Me.Close()
+        End If
     End Sub
 
     Sub InitLog()

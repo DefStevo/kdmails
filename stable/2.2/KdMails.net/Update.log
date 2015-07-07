@@ -1,4 +1,8 @@
-﻿!2.2.0|25.03.2015
+﻿!2.2.1|07.07.2015
+- Batchmodus (Parameter /Batch) implementiert
+  . Mails werden immer kopiert
+  . Mails ohne Ordnerzuordnung werden ignoriert und beim nächsten Lauf erneut verarbeiten
+!2.2.0|25.03.2015
 - LDAP - Domänenanmeldung (Benutzer/Kennwort) verwenden. Anmeldungsfenster implementiert.
 - Protokollierung für die Verarbeitungsläufe implementiert
 - Fenster für die Protokollansicht implementiert
