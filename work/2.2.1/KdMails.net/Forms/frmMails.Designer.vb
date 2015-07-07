@@ -28,9 +28,6 @@ Partial Class frmMails
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMails))
         Me.dgMails = New System.Windows.Forms.DataGridView()
-        Me.PanelUnten = New System.Windows.Forms.Panel()
-        Me.btnAbbrechen = New System.Windows.Forms.Button()
-        Me.btnKopieren = New System.Windows.Forms.Button()
         Me.cEA = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cMail = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cMailEID = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -41,24 +38,27 @@ Partial Class frmMails
         Me.cIgnore = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.cMailAdress = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.PanelUnten = New System.Windows.Forms.Panel()
+        Me.btnAbbrechen = New System.Windows.Forms.Button()
+        Me.btnKopieren = New System.Windows.Forms.Button()
         Me.PanelOben = New System.Windows.Forms.Panel()
-        Me.PanelMitte = New System.Windows.Forms.Panel()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.strVersion = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.strAktLauf = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.strVorhLauf = New System.Windows.Forms.TextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.strPosteingang = New System.Windows.Forms.TextBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.strGesendet = New System.Windows.Forms.TextBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.strUngelesenNeu = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.strUngelesen = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.strDatei = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.strUngelesen = New System.Windows.Forms.TextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.strUngelesenNeu = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.strGesendet = New System.Windows.Forms.TextBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.strPosteingang = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.strVorhLauf = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.strAktLauf = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.strVersion = New System.Windows.Forms.TextBox()
+        Me.PanelMitte = New System.Windows.Forms.Panel()
         CType(Me.dgMails, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelUnten.SuspendLayout()
         Me.PanelOben.SuspendLayout()
@@ -87,39 +87,6 @@ Partial Class frmMails
         Me.dgMails.ShowEditingIcon = False
         Me.dgMails.Size = New System.Drawing.Size(1422, 513)
         Me.dgMails.TabIndex = 1
-        '
-        'PanelUnten
-        '
-        Me.PanelUnten.Controls.Add(Me.btnAbbrechen)
-        Me.PanelUnten.Controls.Add(Me.btnKopieren)
-        Me.PanelUnten.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelUnten.Location = New System.Drawing.Point(0, 623)
-        Me.PanelUnten.Name = "PanelUnten"
-        Me.PanelUnten.Size = New System.Drawing.Size(1422, 20)
-        Me.PanelUnten.TabIndex = 2
-        '
-        'btnAbbrechen
-        '
-        Me.btnAbbrechen.Dock = System.Windows.Forms.DockStyle.Right
-        Me.btnAbbrechen.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnAbbrechen.Location = New System.Drawing.Point(1122, 0)
-        Me.btnAbbrechen.Name = "btnAbbrechen"
-        Me.btnAbbrechen.Size = New System.Drawing.Size(300, 20)
-        Me.btnAbbrechen.TabIndex = 5
-        Me.btnAbbrechen.Text = "A&bbrechen"
-        Me.btnAbbrechen.UseVisualStyleBackColor = True
-        '
-        'btnKopieren
-        '
-        Me.btnKopieren.Dock = System.Windows.Forms.DockStyle.Left
-        Me.btnKopieren.Enabled = False
-        Me.btnKopieren.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnKopieren.Location = New System.Drawing.Point(0, 0)
-        Me.btnKopieren.Name = "btnKopieren"
-        Me.btnKopieren.Size = New System.Drawing.Size(300, 20)
-        Me.btnKopieren.TabIndex = 4
-        Me.btnKopieren.Text = "&Kopieren"
-        Me.btnKopieren.UseVisualStyleBackColor = True
         '
         'cEA
         '
@@ -198,6 +165,39 @@ Partial Class frmMails
         Me.cTime.Name = "cTime"
         Me.cTime.Width = 150
         '
+        'PanelUnten
+        '
+        Me.PanelUnten.Controls.Add(Me.btnAbbrechen)
+        Me.PanelUnten.Controls.Add(Me.btnKopieren)
+        Me.PanelUnten.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelUnten.Location = New System.Drawing.Point(0, 623)
+        Me.PanelUnten.Name = "PanelUnten"
+        Me.PanelUnten.Size = New System.Drawing.Size(1422, 20)
+        Me.PanelUnten.TabIndex = 2
+        '
+        'btnAbbrechen
+        '
+        Me.btnAbbrechen.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btnAbbrechen.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnAbbrechen.Location = New System.Drawing.Point(1122, 0)
+        Me.btnAbbrechen.Name = "btnAbbrechen"
+        Me.btnAbbrechen.Size = New System.Drawing.Size(300, 20)
+        Me.btnAbbrechen.TabIndex = 5
+        Me.btnAbbrechen.Text = "A&bbrechen"
+        Me.btnAbbrechen.UseVisualStyleBackColor = True
+        '
+        'btnKopieren
+        '
+        Me.btnKopieren.Dock = System.Windows.Forms.DockStyle.Left
+        Me.btnKopieren.Enabled = False
+        Me.btnKopieren.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnKopieren.Location = New System.Drawing.Point(0, 0)
+        Me.btnKopieren.Name = "btnKopieren"
+        Me.btnKopieren.Size = New System.Drawing.Size(300, 20)
+        Me.btnKopieren.TabIndex = 4
+        Me.btnKopieren.Text = "&Kopieren"
+        Me.btnKopieren.UseVisualStyleBackColor = True
+        '
         'PanelOben
         '
         Me.PanelOben.Controls.Add(Me.Label8)
@@ -222,50 +222,99 @@ Partial Class frmMails
         Me.PanelOben.Size = New System.Drawing.Size(1422, 110)
         Me.PanelOben.TabIndex = 3
         '
-        'PanelMitte
+        'Label8
         '
-        Me.PanelMitte.Controls.Add(Me.dgMails)
-        Me.PanelMitte.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelMitte.Location = New System.Drawing.Point(0, 110)
-        Me.PanelMitte.Name = "PanelMitte"
-        Me.PanelMitte.Size = New System.Drawing.Size(1422, 513)
-        Me.PanelMitte.TabIndex = 4
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(13, 8)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(34, 13)
+        Me.Label8.TabIndex = 20
+        Me.Label8.Text = "Datei"
         '
-        'Label1
+        'strDatei
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 34)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(46, 13)
-        Me.Label1.TabIndex = 6
-        Me.Label1.Text = "Version"
+        Me.strDatei.Location = New System.Drawing.Point(105, 6)
+        Me.strDatei.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.strDatei.Name = "strDatei"
+        Me.strDatei.ReadOnly = True
+        Me.strDatei.Size = New System.Drawing.Size(688, 22)
+        Me.strDatei.TabIndex = 19
         '
-        'strVersion
+        'Label7
         '
-        Me.strVersion.Location = New System.Drawing.Point(105, 32)
-        Me.strVersion.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.strVersion.Name = "strVersion"
-        Me.strVersion.ReadOnly = True
-        Me.strVersion.Size = New System.Drawing.Size(170, 22)
-        Me.strVersion.TabIndex = 5
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(1128, 61)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(180, 13)
+        Me.Label7.TabIndex = 18
+        Me.Label7.Text = "Ungelesene/nicht Verarbeitete alt"
         '
-        'Label2
+        'strUngelesen
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(13, 60)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(78, 13)
-        Me.Label2.TabIndex = 8
-        Me.Label2.Text = "Aktueller Lauf"
+        Me.strUngelesen.Location = New System.Drawing.Point(1320, 58)
+        Me.strUngelesen.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.strUngelesen.Name = "strUngelesen"
+        Me.strUngelesen.ReadOnly = True
+        Me.strUngelesen.Size = New System.Drawing.Size(90, 22)
+        Me.strUngelesen.TabIndex = 17
+        Me.strUngelesen.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'strAktLauf
+        'Label6
         '
-        Me.strAktLauf.Location = New System.Drawing.Point(105, 58)
-        Me.strAktLauf.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.strAktLauf.Name = "strAktLauf"
-        Me.strAktLauf.ReadOnly = True
-        Me.strAktLauf.Size = New System.Drawing.Size(170, 22)
-        Me.strAktLauf.TabIndex = 7
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(1128, 87)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(187, 13)
+        Me.Label6.TabIndex = 16
+        Me.Label6.Text = "Ungelesene/nicht Verarbeitete neu"
+        '
+        'strUngelesenNeu
+        '
+        Me.strUngelesenNeu.Location = New System.Drawing.Point(1320, 84)
+        Me.strUngelesenNeu.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.strUngelesenNeu.Name = "strUngelesenNeu"
+        Me.strUngelesenNeu.ReadOnly = True
+        Me.strUngelesenNeu.Size = New System.Drawing.Size(90, 22)
+        Me.strUngelesenNeu.TabIndex = 15
+        Me.strUngelesenNeu.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(1128, 35)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(62, 13)
+        Me.Label5.TabIndex = 14
+        Me.Label5.Text = "Gesendete"
+        '
+        'strGesendet
+        '
+        Me.strGesendet.Location = New System.Drawing.Point(1320, 32)
+        Me.strGesendet.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.strGesendet.Name = "strGesendet"
+        Me.strGesendet.ReadOnly = True
+        Me.strGesendet.Size = New System.Drawing.Size(90, 22)
+        Me.strGesendet.TabIndex = 13
+        Me.strGesendet.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(1128, 9)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(72, 13)
+        Me.Label4.TabIndex = 12
+        Me.Label4.Text = "Posteingang"
+        '
+        'strPosteingang
+        '
+        Me.strPosteingang.Location = New System.Drawing.Point(1320, 6)
+        Me.strPosteingang.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.strPosteingang.Name = "strPosteingang"
+        Me.strPosteingang.ReadOnly = True
+        Me.strPosteingang.Size = New System.Drawing.Size(90, 22)
+        Me.strPosteingang.TabIndex = 11
+        Me.strPosteingang.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label3
         '
@@ -285,99 +334,50 @@ Partial Class frmMails
         Me.strVorhLauf.Size = New System.Drawing.Size(170, 22)
         Me.strVorhLauf.TabIndex = 9
         '
-        'Label4
+        'Label2
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(1224, 10)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(72, 13)
-        Me.Label4.TabIndex = 12
-        Me.Label4.Text = "Posteingang"
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(13, 60)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(78, 13)
+        Me.Label2.TabIndex = 8
+        Me.Label2.Text = "Aktueller Lauf"
         '
-        'strPosteingang
+        'strAktLauf
         '
-        Me.strPosteingang.Location = New System.Drawing.Point(1320, 6)
-        Me.strPosteingang.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.strPosteingang.Name = "strPosteingang"
-        Me.strPosteingang.ReadOnly = True
-        Me.strPosteingang.Size = New System.Drawing.Size(90, 22)
-        Me.strPosteingang.TabIndex = 11
-        Me.strPosteingang.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.strAktLauf.Location = New System.Drawing.Point(105, 58)
+        Me.strAktLauf.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.strAktLauf.Name = "strAktLauf"
+        Me.strAktLauf.ReadOnly = True
+        Me.strAktLauf.Size = New System.Drawing.Size(170, 22)
+        Me.strAktLauf.TabIndex = 7
         '
-        'Label5
+        'Label1
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(1224, 36)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(62, 13)
-        Me.Label5.TabIndex = 14
-        Me.Label5.Text = "Gesendete"
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(13, 34)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(46, 13)
+        Me.Label1.TabIndex = 6
+        Me.Label1.Text = "Version"
         '
-        'strGesendet
+        'strVersion
         '
-        Me.strGesendet.Location = New System.Drawing.Point(1320, 32)
-        Me.strGesendet.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.strGesendet.Name = "strGesendet"
-        Me.strGesendet.ReadOnly = True
-        Me.strGesendet.Size = New System.Drawing.Size(90, 22)
-        Me.strGesendet.TabIndex = 13
-        Me.strGesendet.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.strVersion.Location = New System.Drawing.Point(105, 32)
+        Me.strVersion.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.strVersion.Name = "strVersion"
+        Me.strVersion.ReadOnly = True
+        Me.strVersion.Size = New System.Drawing.Size(170, 22)
+        Me.strVersion.TabIndex = 5
         '
-        'Label6
+        'PanelMitte
         '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(1224, 88)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(91, 13)
-        Me.Label6.TabIndex = 16
-        Me.Label6.Text = "Ungelesene neu"
-        '
-        'strUngelesenNeu
-        '
-        Me.strUngelesenNeu.Location = New System.Drawing.Point(1320, 84)
-        Me.strUngelesenNeu.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.strUngelesenNeu.Name = "strUngelesenNeu"
-        Me.strUngelesenNeu.ReadOnly = True
-        Me.strUngelesenNeu.Size = New System.Drawing.Size(90, 22)
-        Me.strUngelesenNeu.TabIndex = 15
-        Me.strUngelesenNeu.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(1224, 62)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(84, 13)
-        Me.Label7.TabIndex = 18
-        Me.Label7.Text = "Ungelesene alt"
-        '
-        'strUngelesen
-        '
-        Me.strUngelesen.Location = New System.Drawing.Point(1320, 58)
-        Me.strUngelesen.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.strUngelesen.Name = "strUngelesen"
-        Me.strUngelesen.ReadOnly = True
-        Me.strUngelesen.Size = New System.Drawing.Size(90, 22)
-        Me.strUngelesen.TabIndex = 17
-        Me.strUngelesen.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(13, 8)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(34, 13)
-        Me.Label8.TabIndex = 20
-        Me.Label8.Text = "Datei"
-        '
-        'strDatei
-        '
-        Me.strDatei.Location = New System.Drawing.Point(105, 6)
-        Me.strDatei.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.strDatei.Name = "strDatei"
-        Me.strDatei.ReadOnly = True
-        Me.strDatei.Size = New System.Drawing.Size(688, 22)
-        Me.strDatei.TabIndex = 19
+        Me.PanelMitte.Controls.Add(Me.dgMails)
+        Me.PanelMitte.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelMitte.Location = New System.Drawing.Point(0, 110)
+        Me.PanelMitte.Name = "PanelMitte"
+        Me.PanelMitte.Size = New System.Drawing.Size(1422, 513)
+        Me.PanelMitte.TabIndex = 4
         '
         'frmMails
         '

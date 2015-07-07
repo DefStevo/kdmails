@@ -112,19 +112,21 @@ Public Class clsDatenbank
         Try
             _oraConn.Open()
         Catch ex As System.Data.OleDb.OleDbException
-            Select Case ex.ErrorCode
-                Case -2147467259
-                    'Provider nicht installiert
+            If Not mdlHaupt._Batch Then
+                Select Case ex.ErrorCode
+                    Case -2147467259
+                        'Provider nicht installiert
 
-                Case Else
-                    MsgBox("Fehler: " & ex.ToString & vbCrLf & vbCrLf & _
-                   "Server: " & _strServer & vbCrLf & _
-                   "Datebank: " & _strDB & vbCrLf & _
-                   "Benutzer: " & _strUser, MsgBoxStyle.Critical, "Fehler bei der Verbindung zur Datenbank")
-            End Select
-
+                    Case Else
+                        MsgBox("Fehler: " & ex.ToString & vbCrLf & vbCrLf & _
+                       "Server: " & _strServer & vbCrLf & _
+                       "Datebank: " & _strDB & vbCrLf & _
+                       "Benutzer: " & _strUser, MsgBoxStyle.Critical, "Fehler bei der Verbindung zur Datenbank")
+                End Select
+            End If
             _bConnStatus = False
             Return "Keine Verbindung zur Datenbank " & _strDB & "@" & _strServer
+
         End Try
 
         _bConnStatus = True

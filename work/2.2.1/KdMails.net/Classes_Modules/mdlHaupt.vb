@@ -17,6 +17,9 @@ Module mdlHaupt
     Private _strVersion_Update_Remote As String = ""
     Public _FolderBrowser As FolderBrowserDialog
 
+    Public _Batch As Boolean = False
+
+
 #End Region
 
 #Region "Sub/Funktionen"
@@ -24,6 +27,7 @@ Module mdlHaupt
         _FolderBrowser = New FolderBrowserDialog
         _FolderBrowser.RootFolder = Environment.SpecialFolder.MyComputer
 
+        '!!! Kein Batchmodus nach AutoUpdate
         If Not Auto_Update() = True Then
 
             For i As Integer = 0 To My.Application.CommandLineArgs.Count - 1
@@ -39,11 +43,15 @@ Module mdlHaupt
                             frmChangeLog.ShowDialog()
                         End If
 
+                    Case "/Batch"
+                        'Batchmodus
+                        _Batch = True
+
                 End Select
             Next
 
-
             frmHaupt.ShowDialog()
+
         End If
     End Sub
 

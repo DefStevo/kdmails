@@ -18,6 +18,8 @@ Public Class frmMails
         E
         A
         U
+        BA
+        BE
         IGNORE
         EX
         UNGELESEN
@@ -47,8 +49,9 @@ Public Class frmMails
     End Enum
 
     Private Enum _UnreadMailInfos As Integer
-        EntryId = 0
-        Adresse = 1
+        Typ = 0
+        EntryId = 1
+        Adresse = 2
     End Enum
 
 #End Region
@@ -150,8 +153,10 @@ Public Class frmMails
             With frmHaupt.cConfig.oUnreadMailL(Index)
                 Select Case Info
                     Case 0
-                        Return .strEntryId
+                        Return .strTyp
                     Case 1
+                        Return .strEntryId
+                    Case 2
                         Return .strAdresse
                 End Select
             End With
@@ -200,7 +205,10 @@ Public Class frmMails
 
         FensterAnpassen()
 
-        Me.Show()
+        'Fenster im Batchmodus nicht anzeigen
+        If Not mdlHaupt._Batch Then
+            Me.Show()
+        End If
 
         Cursor.Current = Cursors.WaitCursor
 
@@ -229,6 +237,11 @@ Public Class frmMails
         End If
 
         Cursor.Current = Cursors.Default
+
+        If mdlHaupt._Batch Then
+            btnKopieren_click(sender, e)
+            Me.Close()
+        End If
 
     End Sub
 
@@ -382,7 +395,7 @@ Public Class frmMails
                         _dgSetCheckBoxReadOnly(_GetdgColumnNameByEnum(_dgMailColumns.cIgnore), i) = False
                         'dgMails.Rows(i).Cells(_dgMailColumns.cIgnore).ReadOnly = False
 
-                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.U.ToString
+                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _GetUnreadMailInfo(_UnreadMailInfos.Typ, y)
 
                         strAdresse = _GetMailInfo(_MailInfos.EMailFrom)
 
@@ -417,7 +430,7 @@ Public Class frmMails
 
                         _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i) = _GetMailInfo(_MailInfos.EntryID)
 
-                        'Mail ist nun gelesen
+                        'Mail ist nun gelesen / Wird auch für offene Verarbeitungen im Batchmodus ausgeführt
                         If _GetMailInfo(_MailInfos.Unread) = False Then
                             frmHaupt.cConfig.GetDomain(frmHaupt.cConfig.SearchDomain(_GetUnreadMailInfo(_UnreadMailInfos.Adresse, y)), _
                                                        Nothing, _
@@ -425,6 +438,21 @@ Public Class frmMails
                                                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i), _
                                                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
                                                        _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
+
+                            'Im Batchmodus ohne Ordnerzuordnung muss die E-Mail als "neue" Ungelesene hinzugefügt werden.
+                            If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = "U" _
+                                And _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "" _
+                                And mdlHaupt._Batch Then
+                                _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = "BE"
+
+                                'Mail aus Liste entfernen
+                                frmHaupt.cConfig.RemoveUnreadMails(-1, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i))
+
+                                'Mail neu in Liste hinzufügen
+                                frmHaupt.cConfig.AddUnreadMail(_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i), "@" & strDomain, _GetMailInfo(_MailInfos.EntryID))
+
+
+                            End If
 
                             'Checkbox zum Kopieren aktivieren
                             If Not _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "" Then
@@ -540,6 +568,11 @@ Public Class frmMails
 
                 'Prüfen ob E-Mail in IgnoreListe ansonsten Ordner suchen
                 CheckMail(i, strAdresse, strDomain)
+
+                If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "" And mdlHaupt._Batch Then
+                    'Mails ohne Ordnerzuordnung müssen gespeichert werden und beim nächsten Lauf verarbeitet werden.
+                    frmHaupt.cConfig.AddUnreadMail("B" + _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i), "@" & strDomain, _GetMailInfo(_MailInfos.EntryID))
+                End If
 
                 'Nächste Mail laden
                 frmHaupt.cOutlook.oMail = frmHaupt.cOutlook.GetNextMail
@@ -816,7 +849,7 @@ Public Class frmMails
                                           _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerEID), i), _
                                           _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdnerSID), i))
                 Else
-                    frmHaupt.cConfig.AddUnreadMail(strAdresse, _GetMailInfo(_MailInfos.EntryID))
+                    frmHaupt.cConfig.AddUnreadMail("U", strAdresse, _GetMailInfo(_MailInfos.EntryID))
 
                     _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.U.ToString
 
@@ -849,7 +882,7 @@ Public Class frmMails
                     End If
 
                 Else
-                    frmHaupt.cConfig.AddUnreadMail("@" & strDomain, _GetMailInfo(_MailInfos.EntryID))
+                    frmHaupt.cConfig.AddUnreadMail("U", "@" & strDomain, _GetMailInfo(_MailInfos.EntryID))
 
                     _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = _Konstante.U.ToString
 
@@ -899,15 +932,19 @@ Public Class frmMails
                     And Not _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.UNGELESEN.ToString + " ---" Then
                     'Ungelesenen Nachricht kann aus Liste entfernt werden
                     frmHaupt.cConfig.RemoveUnreadMails(-1, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i))
+                ElseIf (_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = "BA" Or _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = "BE") _
+                    And Not _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "" Then
+                    'Offene Nachricht kann aus Liste entfernt werden
+                    frmHaupt.cConfig.RemoveUnreadMails(-1, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i))
                 End If
             ElseIf _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = "U" And _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.IGNORE.ToString + " ---" Then
                 frmHaupt.cConfig.RemoveUnreadMails(-1, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i))
+            ElseIf (_dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = "BA" Or _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i) = "BE") _
+                    And (Not _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "" Or Not mdlHaupt._Batch) Then
+                frmHaupt.cConfig.RemoveUnreadMails(-1, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cMailEID), i))
             End If
 
-
-
             'Zeile aus Datagrid entfernen
-
             sPOSLog = New sLogPOSInfos
             sPOSLog.SetInfo(ELogPOSInfos.EA, _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cEA), i))
             If _dgItem(_GetdgColumnNameByEnum(_dgMailColumns.cOrdner), i) = "--- " + _Konstante.IGNORE.ToString + " ---" Then
@@ -945,11 +982,4 @@ Public Class frmMails
 
 #End Region
 
-    Private Sub Panel1_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs) Handles PanelUnten.Paint
-
-    End Sub
-
-    Private Sub PanelOben_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs) Handles PanelOben.Paint
-
-    End Sub
 End Class
