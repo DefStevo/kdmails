@@ -246,6 +246,11 @@ Public Class clsLogging
 
 #Region "Funktionen"
     Function InitLOG() As Boolean
+        'Prüfen ob Protokollpfad existiert
+        If Not System.IO.Directory.Exists(_strLogPfad) Then
+            System.IO.Directory.CreateDirectory(_strLogPfad)
+        End If
+
         If Not _bInitStatus Then
             oLogHDRInfosL = New List(Of sLogHDRInfos)
             oLogHDRInfosZ = Nothing
