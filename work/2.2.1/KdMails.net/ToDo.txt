@@ -1,5 +1,2 @@
 ﻿--Version X
-	. Batchfunktion
-	
---Version 3 
-    . als Outlook Addin
+	.Umbau als Outlook Addin

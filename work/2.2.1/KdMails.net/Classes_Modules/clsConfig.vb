@@ -56,11 +56,13 @@
     End Structure
 
     Structure sUnreadMail
+        Dim strTyp As String
         Dim strAdresse As String
         Dim strEntryId As String
         Dim bEntfernen As Boolean
 
-        Sub New(ByVal Adresse As String, ByVal EntryId As String, Optional ByVal Entfernen As Boolean = False)
+        Sub New(ByVal Typ As String, ByVal Adresse As String, ByVal EntryId As String, Optional ByVal Entfernen As Boolean = False)
+            strTyp = Typ
             strAdresse = Adresse
             strEntryId = EntryId
             bEntfernen = Entfernen
@@ -341,7 +343,14 @@
             strBuffer = _srUnreadMails.ReadLine
 
             While Not strBuffer Is Nothing
-                AddUnreadMail(strBuffer.Split(";")(0).ToString, strBuffer.Split(";")(1).ToString)
+                '!!!TODO (Kompatiblität mit alten Files prüfen)
+                If strBuffer.Split(";").Count = 2 Then
+                    AddUnreadMail("U", strBuffer.Split(";")(0).ToString, strBuffer.Split(";")(1).ToString)
+                Else
+                    AddUnreadMail(strBuffer.Split(";")(0).ToString, strBuffer.Split(";")(1).ToString, strBuffer.Split(";")(2).ToString)
+                End If
+
+
 
                 strBuffer = _srUnreadMails.ReadLine
             End While
@@ -468,6 +477,7 @@
             If oUnreadMailL(i).bEntfernen = False Then
                 With oUnreadMailL(i)
                     strBuffer = strBuffer & _
+                                .strTyp & ";" & _
                                 .strAdresse & ";" & _
                                 .strEntryId & vbCrLf
                 End With
@@ -857,7 +867,8 @@
         Return iCount
     End Function
 
-    Function AddUnreadMail(ByVal Adresse As String, _
+    Function AddUnreadMail(ByVal Typ As String, _
+                           ByVal Adresse As String, _
                            ByVal EntryId As String) As Boolean
         If EntryId Is Nothing Then
             Return False
@@ -868,7 +879,7 @@
         End If
 
         'Objekt in Liste aufnehmen
-        oUnreadMailZ = New sUnreadMail(Adresse, EntryId)
+        oUnreadMailZ = New sUnreadMail(Typ, Adresse, EntryId)
         oUnreadMailL.Add(oUnreadMailZ)
         Return True
 
@@ -878,7 +889,7 @@
         Dim bMatchUnreadMail As Boolean = False
 
         For i As Integer = 0 To oUnreadMailL.Count - 1
-            If EntryID = oUnreadMailL(i).strEntryId Then
+            If EntryID = oUnreadMailL(i).strEntryId And Not oUnreadMailL(i).bEntfernen Then
                 bMatchUnreadMail = True
             End If
 

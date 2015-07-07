@@ -279,7 +279,8 @@ Public Class clsOutlook
 
         If Not OrdnerEID = Nothing And Not OrdnerSID = Nothing Then
             _MSFold = _MSNameSpace.GetFolderFromID(OrdnerEID, OrdnerSID)
-            If Copy = 0 Then
+            If Copy = 0 Or mdlHaupt._Batch Then
+                'Im Batchmodus immer kopieren
                 _MSMailItem.Copy()
             End If
             _MSMailItem.Move(_MSFold)
