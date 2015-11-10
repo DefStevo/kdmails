@@ -1,0 +1,1 @@
+Outlook Tool zum automatisches Verschieben/Kopieren von Kunden E-Mails aus den Ordnern Posteingang/Gesendet Objekte in die entsprechenden Öffentenlichen Ordner.
